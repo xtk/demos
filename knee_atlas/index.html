@@ -1,0 +1,311 @@
+<html>
+<head>
+<title>The SPL Knee Atlas</title>
+
+<script type="text/javascript" src="../xtk.js"></script>
+
+<script type="text/javascript">
+  
+  var run = function() {
+      
+      var r = new X.renderer('r');
+      r.init();
+      
+      //
+      // bones
+      //
+      var bones = new X.object();
+      
+      var femur = new X.object();
+      femur.load('Model_95_femur.vtk');
+      
+      var tibia = new X.object();
+      tibia.load('Model_96_tibia.vtk');
+      
+      var fibula = new X.object();
+      fibula.load('Model_97_fibula.vtk');
+      
+      var patella = new X.object();
+      patella.load('Model_98_patella.vtk');
+            
+      
+      bones.children().push(femur);
+      bones.children().push(tibia);
+      bones.children().push(fibula);
+      bones.children().push(patella);
+      bones.setColor(1,1,1);
+      
+      //
+      // cartilages
+      //
+      var cartilages = new X.object();
+      
+      var femoral_cartilage = new X.object();
+      femoral_cartilage.load('Model_83_femoral_cartilage.vtk');
+      
+      var lateral_tibial_cartilage = new X.object();
+      lateral_tibial_cartilage.load('Model_84_lateral_tibial_cartilage.vtk');      
+      
+      var medial_tibial_cartilage = new X.object();
+      medial_tibial_cartilage.load('Model_85_medial_tibial_cartilage.vtk');      
+      
+      var patellar_cartilage = new X.object();
+      patellar_cartilage.load('Model_86_patellar_cartilage.vtk');
+      
+      cartilages.children().push(femoral_cartilage);
+      cartilages.children().push(lateral_tibial_cartilage);
+      cartilages.children().push(medial_tibial_cartilage);
+      cartilages.children().push(patellar_cartilage);
+      cartilages.setColor(0.43,0.71,0.82);
+      
+      //
+      // meniscus
+      //
+      var meniscus = new X.object();
+      
+      var lateral_meniscus = new X.object();
+      lateral_meniscus.load('Model_81_lateral_meniscus.vtk');
+      
+      var medial_meniscus = new X.object();
+      medial_meniscus.load('Model_82_medial_meniscus.vtk');
+      
+      meniscus.children().push(lateral_meniscus);
+      meniscus.children().push(medial_meniscus);
+      meniscus.setColor(0.7,0.7,0.7);
+      
+      //
+      // vascular system
+      //
+      var vascular_system = new X.object();
+      
+      //
+      // arteries
+      var arteries = new X.object();
+      
+      var popliteal_artery = new X.object();
+      popliteal_artery.load('Model_71_popliteal_artery.vtk');
+      
+      var superior_medial_genicular_artery = new X.object();
+      superior_medial_genicular_artery.load('Model_73_superior_medial_genicular_artery.vtk');
+      
+      var superior_lateral_genicular_artery = new X.object();
+      superior_lateral_genicular_artery.load('Model_74_superior_lateral_genicular_artery.vtk');
+      
+      var middle_genicular_artery = new X.object();
+      middle_genicular_artery.load('Model_75_middle_genicular_artery.vtk');
+      
+      arteries.children().push(popliteal_artery);
+      arteries.children().push(superior_medial_genicular_artery);
+      arteries.children().push(superior_lateral_genicular_artery);
+      arteries.children().push(middle_genicular_artery);
+      arteries.setColor(1,0,0);
+      
+      //
+      // veins
+      var veins = new X.object();
+      
+      var popliteal_vein = new X.object();
+      popliteal_vein.load('Model_72_popliteal_vein.vtk');
+      
+      var great_saphenous_vein = new X.object();
+      great_saphenous_vein.load('Model_77_great_saphenous_vein.vtk');
+      
+      var small_saphenous_vein = new X.object();
+      small_saphenous_vein.load('Model_78_small_saphenous_vein.vtk');
+      
+      veins.children().push(popliteal_vein);
+      veins.children().push(great_saphenous_vein);
+      veins.children().push(small_saphenous_vein);
+      veins.setColor(0,0,1);
+      
+      vascular_system.children().push(arteries);
+      vascular_system.children().push(veins);
+      
+      //
+      // nerves
+      //
+      var nerves = new X.object();
+      
+      var peroneus_nerve = new X.object();
+      peroneus_nerve.load('Model_61_peroneus_nerve.vtk');
+      
+      var tibialis_nerve = new X.object();
+      tibialis_nerve.load('Model_62_tibialis_nerve.vtk');
+      
+      var muscular_branches_tibialis_nerve = new X.object();
+      muscular_branches_tibialis_nerve.load('Model_63_muscular_branches_tibialis_nerve.vtk');
+      
+      var medial_sural_cutaneous_nerve = new X.object();
+      medial_sural_cutaneous_nerve.load('Model_64_medial_sural_cutaneous_nerve.vtk');
+      
+      nerves.children().push(peroneus_nerve);
+      nerves.children().push(tibialis_nerve);
+      nerves.children().push(muscular_branches_tibialis_nerve);
+      nerves.children().push(medial_sural_cutaneous_nerve);
+      nerves.setColor(1,1,0);
+      
+      //
+      // tendons
+      //
+      var tendons = new X.object();
+      
+      var adductor_magnus_tendon = new X.object();
+      adductor_magnus_tendon.load('Model_41_adductor_magnus_tendon.vtk');
+      
+      var biceps_femoris_tendon = new X.object();
+      biceps_femoris_tendon.load('Model_42_biceps_femoris_tendon.vtk');
+      
+      var iliotibial_tract = new X.object();
+      iliotibial_tract.load('Model_43_iliotibial_tract.vtk');
+      
+      var popliteus_tendon = new X.object();
+      popliteus_tendon.load('Model_44_popliteus_tendon.vtk');
+      
+      var soleus_tendon = new X.object();
+      soleus_tendon.load('Model_46_soleus_tendon.vtk');
+      
+      var semitendinosus_tendon = new X.object();
+      semitendinosus_tendon.load('Model_47_semitendinosus_tendon.vtk');
+      
+      var gracilis_tendon = new X.object();
+      gracilis_tendon.load('Model_48_gracilis_tendon.vtk');
+      
+      tendons.children().push(adductor_magnus_tendon);
+      tendons.children().push(biceps_femoris_tendon);
+      tendons.children().push(iliotibial_tract);
+      tendons.children().push(popliteus_tendon);
+      tendons.children().push(soleus_tendon);
+      tendons.children().push(semitendinosus_tendon);
+      tendons.children().push(gracilis_tendon);
+      tendons.setColor(0.93,0.85,0.85);
+      
+      //
+      // muscles
+      //
+      var muscles = new X.object();
+      
+      var vastus_lateralis_muscle = new X.object();
+      vastus_lateralis_muscle.load('Model_12_vastus_lateralis_muscle.vtk');
+      
+      var vastus_medialis_muscle = new X.object();
+      vastus_medialis_muscle.load('Model_13_vastus_medialis_muscle.vtk');
+      
+      var biceps_femoris_muscle = new X.object();
+      biceps_femoris_muscle.load('Model_15_biceps_femoris_muscle.vtk');
+      
+      var semimembranosus_muscle = new X.object();
+      semimembranosus_muscle.load('Model_16_semimembranosus_muscle.vtk');
+      
+      var semitendinosus_muscle = new X.object();
+      semitendinosus_muscle.load('Model_17_semitendinosus_muscle.vtk');
+      
+      var gracilis_muscle = new X.object();
+      gracilis_muscle.load('Model_18_gracilis_muscle.vtk');
+      
+      var sartorius_muscle = new X.object();
+      sartorius_muscle.load('Model_19_sartorius_muscle.vtk');
+      
+      var medial_head_gastrocnemius_muscle = new X.object();
+      medial_head_gastrocnemius_muscle.load('Model_20_medial_head_gastrocnemius_muscle.vtk');
+      
+      var lateral_head_gastrocnemius_muscle = new X.object();
+      lateral_head_gastrocnemius_muscle.load('Model_21_lateral_head_gastrocnemius_muscle.vtk');
+      
+      var popliteus_muscle = new X.object();
+      popliteus_muscle.load('Model_22_popliteus_muscle.vtk');
+      
+      var soleus_muscle = new X.object();
+      soleus_muscle.load('Model_23_soleus_muscle.vtk');
+      
+      var tibialis_anterior_muscle = new X.object();
+      tibialis_anterior_muscle.load('Model_24_tibialis_anterior_muscle.vtk');
+      
+      var extensor_digitorum_longus_muscle = new X.object();
+      extensor_digitorum_longus_muscle.load('Model_25_extensor_digitorum_longus_muscle.vtk');
+      
+      var peroneus_longus_muscle = new X.object();
+      peroneus_longus_muscle.load('Model_26_peroneus_longus_muscle.vtk');
+      
+      muscles.children().push(vastus_lateralis_muscle);
+      muscles.children().push(vastus_medialis_muscle);
+      muscles.children().push(biceps_femoris_muscle);
+      muscles.children().push(semimembranosus_muscle);
+      muscles.children().push(semitendinosus_muscle);
+      muscles.children().push(gracilis_muscle);
+      muscles.children().push(sartorius_muscle);
+      muscles.children().push(medial_head_gastrocnemius_muscle);
+      muscles.children().push(lateral_head_gastrocnemius_muscle);
+      muscles.children().push(popliteus_muscle);
+      muscles.children().push(soleus_muscle);
+      muscles.children().push(tibialis_anterior_muscle);
+      muscles.children().push(extensor_digitorum_longus_muscle);
+      muscles.children().push(peroneus_longus_muscle);
+      muscles.setColor(0.89,0.48,0.48);
+      
+      //
+      // ligaments
+      //
+      var ligaments = new X.object();
+      
+      var anterior_cruciate_ligament = new X.object();
+      anterior_cruciate_ligament.load('Model_31_anterior_cruciate_ligament.vtk');
+      
+      var posterior_cruciate_ligament = new X.object();
+      posterior_cruciate_ligament.load('Model_32_posterior_cruciate_ligament.vtk');
+      
+      var fibular_collateral_ligament = new X.object();
+      fibular_collateral_ligament.load('Model_33_fibular_collateral_ligament.vtk');
+      
+      var tibial_collateral_ligament = new X.object();
+      tibial_collateral_ligament.load('Model_34_tibial_collateral_ligament.vtk');
+      
+      var patellar_ligament = new X.object();
+      patellar_ligament.load('Model_35_patellar_ligament.vtk');
+      
+      ligaments.children().push(anterior_cruciate_ligament);
+      ligaments.children().push(posterior_cruciate_ligament);
+      ligaments.children().push(fibular_collateral_ligament);
+      ligaments.children().push(tibial_collateral_ligament);
+      ligaments.children().push(patellar_ligament);
+      ligaments.setColor(0.8,0.8,0.8);
+      
+      //
+      // fat
+      //
+      var fat = new X.object();
+      
+      var infrapatellar_fat_body = new X.object();
+      infrapatellar_fat_body.load('Model_9_infrapatellar_fat_body.vtk');
+      
+      fat.children().push(infrapatellar_fat_body);
+      fat.setColor(0.87,0.89,0.58);
+      
+      //
+      // Add all knee components to the renderer
+      //
+      r.add(bones);
+      r.add(cartilages);
+      r.add(meniscus);
+      r.add(vascular_system);
+      r.add(nerves);
+      r.add(tendons);
+      r.add(muscles);
+      r.add(ligaments);
+      r.add(fat);
+      
+      // position the camera for a nice view and set the up-vector for correct orientation
+      r.camera().setUp(0, 0, 1);
+      r.camera().setPosition(-300,0,0);
+      
+      // .. curtain up!!
+      r.render();
+      
+  };
+</script>
+
+</head>
+
+<body onload="run()">
+	<div id='r' style='background-color: #000000; width: 100%; height: 100%;'></div>
+</body>
+</html>
