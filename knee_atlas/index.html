@@ -17,15 +17,19 @@
     
     var femur = new X.object();
     femur.load('Model_95_femur.vtk');
+    femur.setCaption('Femur');
     
     var tibia = new X.object();
     tibia.load('Model_96_tibia.vtk');
+    tibia.setCaption('Tibia');
     
     var fibula = new X.object();
     fibula.load('Model_97_fibula.vtk');
+    fibula.setCaption('Fibula');
     
     var patella = new X.object();
     patella.load('Model_98_patella.vtk');
+    patella.setCaption('Patella');
     
 
     bones.children().push(femur);
@@ -41,15 +45,19 @@
     
     var femoral_cartilage = new X.object();
     femoral_cartilage.load('Model_83_femoral_cartilage.vtk');
+    femoral_cartilage.setCaption('Femoral cartilage');
     
     var lateral_tibial_cartilage = new X.object();
     lateral_tibial_cartilage.load('Model_84_lateral_tibial_cartilage.vtk');
+    lateral_tibial_cartilage.setCaption('Lateral tibial cartilage');
     
     var medial_tibial_cartilage = new X.object();
     medial_tibial_cartilage.load('Model_85_medial_tibial_cartilage.vtk');
+    medial_tibial_cartilage.setCaption('Medial tibial cartilage');
     
     var patellar_cartilage = new X.object();
     patellar_cartilage.load('Model_86_patellar_cartilage.vtk');
+    patellar_cartilage.setCaption('Patellar cartilage');
     
     cartilages.children().push(femoral_cartilage);
     cartilages.children().push(lateral_tibial_cartilage);
@@ -64,9 +72,11 @@
     
     var lateral_meniscus = new X.object();
     lateral_meniscus.load('Model_81_lateral_meniscus.vtk');
+    lateral_meniscus.setCaption('Lateral meniscus');
     
     var medial_meniscus = new X.object();
     medial_meniscus.load('Model_82_medial_meniscus.vtk');
+    medial_meniscus.setCaption('Medial meniscus');
     
     meniscus.children().push(lateral_meniscus);
     meniscus.children().push(medial_meniscus);
@@ -83,17 +93,21 @@
     
     var popliteal_artery = new X.object();
     popliteal_artery.load('Model_71_popliteal_artery.vtk');
+    popliteal_artery.setCaption('Popliteal artery');
     
     var superior_medial_genicular_artery = new X.object();
     superior_medial_genicular_artery
         .load('Model_73_superior_medial_genicular_artery.vtk');
+    superior_medial_genicular_artery.setCaption('Superior medial genicular artery');
     
     var superior_lateral_genicular_artery = new X.object();
     superior_lateral_genicular_artery
         .load('Model_74_superior_lateral_genicular_artery.vtk');
+    superior_lateral_genicular_artery.setCaption('Superior lateral genicular artery');
     
     var middle_genicular_artery = new X.object();
     middle_genicular_artery.load('Model_75_middle_genicular_artery.vtk');
+    middle_genicular_artery.setCaption('Middle genicular artery');
     
     arteries.children().push(popliteal_artery);
     arteries.children().push(superior_medial_genicular_artery);
@@ -107,12 +121,15 @@
     
     var popliteal_vein = new X.object();
     popliteal_vein.load('Model_72_popliteal_vein.vtk');
+    popliteal_vein.setCaption('Popliteal vein');
     
     var great_saphenous_vein = new X.object();
     great_saphenous_vein.load('Model_77_great_saphenous_vein.vtk');
+    great_saphenous_vein.setCaption('Great saphenous vein');
     
     var small_saphenous_vein = new X.object();
     small_saphenous_vein.load('Model_78_small_saphenous_vein.vtk');
+    small_saphenous_vein.setCaption('Small saphenous vein');
     
     veins.children().push(popliteal_vein);
     veins.children().push(great_saphenous_vein);
@@ -129,17 +146,21 @@
     
     var peroneus_nerve = new X.object();
     peroneus_nerve.load('Model_61_peroneus_nerve.vtk');
+    peroneus_nerve.setCaption('Peroneus nerve');
     
     var tibialis_nerve = new X.object();
     tibialis_nerve.load('Model_62_tibialis_nerve.vtk');
+    tibialis_nerve.setCaption('Tibialis nerve');
     
     var muscular_branches_tibialis_nerve = new X.object();
     muscular_branches_tibialis_nerve
         .load('Model_63_muscular_branches_tibialis_nerve.vtk');
+    muscular_branches_tibialis_nerve.setCaption('Muscular branches tibialis nerve');
     
     var medial_sural_cutaneous_nerve = new X.object();
     medial_sural_cutaneous_nerve
         .load('Model_64_medial_sural_cutaneous_nerve.vtk');
+    medial_sural_cutaneous_nerve.setCaption('Medial sural cutaneous nerve');
     
     nerves.children().push(peroneus_nerve);
     nerves.children().push(tibialis_nerve);
@@ -154,24 +175,31 @@
     
     var adductor_magnus_tendon = new X.object();
     adductor_magnus_tendon.load('Model_41_adductor_magnus_tendon.vtk');
+    adductor_magnus_tendon.setCaption('Adductor magnus tendon');
     
     var biceps_femoris_tendon = new X.object();
     biceps_femoris_tendon.load('Model_42_biceps_femoris_tendon.vtk');
+    biceps_femoris_tendon.setCaption('Biceps femoris tendon');
     
     var iliotibial_tract = new X.object();
     iliotibial_tract.load('Model_43_iliotibial_tract.vtk');
+    iliotibial_tract.setCaption('Iliotibial tract');
     
     var popliteus_tendon = new X.object();
     popliteus_tendon.load('Model_44_popliteus_tendon.vtk');
+    popliteus_tendon.setCaption('Popliteus tendon');
     
     var soleus_tendon = new X.object();
     soleus_tendon.load('Model_46_soleus_tendon.vtk');
+    soleus_tendon.setCaption('Soleus tendon');
     
     var semitendinosus_tendon = new X.object();
     semitendinosus_tendon.load('Model_47_semitendinosus_tendon.vtk');
+    semitendinosus_tendon.setCaption('Semitendinosus tendon');
     
     var gracilis_tendon = new X.object();
     gracilis_tendon.load('Model_48_gracilis_tendon.vtk');
+    gracilis_tendon.setCaption('Gracilis tendon');
     
     tendons.children().push(adductor_magnus_tendon);
     tendons.children().push(biceps_femoris_tendon);
@@ -189,48 +217,62 @@
     
     var vastus_lateralis_muscle = new X.object();
     vastus_lateralis_muscle.load('Model_12_vastus_lateralis_muscle.vtk');
+    vastus_lateralis_muscle.setCaption('Vastus lateralis muscle');
     
     var vastus_medialis_muscle = new X.object();
     vastus_medialis_muscle.load('Model_13_vastus_medialis_muscle.vtk');
+    vastus_medialis_muscle.setCaption('Vastus medialis muscle');
     
     var biceps_femoris_muscle = new X.object();
     biceps_femoris_muscle.load('Model_15_biceps_femoris_muscle.vtk');
+    biceps_femoris_muscle.setCaption('Biceps femoris muscle');
     
     var semimembranosus_muscle = new X.object();
     semimembranosus_muscle.load('Model_16_semimembranosus_muscle.vtk');
+    semimembranosus_muscle.setCaption('Semimembranosus muscle');
     
     var semitendinosus_muscle = new X.object();
     semitendinosus_muscle.load('Model_17_semitendinosus_muscle.vtk');
+    semitendinosus_muscle.setCaption('Semitendinosus muscle');
     
     var gracilis_muscle = new X.object();
     gracilis_muscle.load('Model_18_gracilis_muscle.vtk');
+    gracilis_muscle.setCaption('Gracilis muscle');
     
     var sartorius_muscle = new X.object();
     sartorius_muscle.load('Model_19_sartorius_muscle.vtk');
+    sartorius_muscle.setCaption('Sartorius muscle');
     
     var medial_head_gastrocnemius_muscle = new X.object();
     medial_head_gastrocnemius_muscle
         .load('Model_20_medial_head_gastrocnemius_muscle.vtk');
+    medial_head_gastrocnemius_muscle.setCaption('Medial head gastrocnemius muscle');
     
     var lateral_head_gastrocnemius_muscle = new X.object();
     lateral_head_gastrocnemius_muscle
         .load('Model_21_lateral_head_gastrocnemius_muscle.vtk');
+    lateral_head_gastrocnemius_muscle.setCaption('Lateral head gastrocnemius muscle');
     
     var popliteus_muscle = new X.object();
     popliteus_muscle.load('Model_22_popliteus_muscle.vtk');
+    popliteus_muscle.setCaption('Popliteus muscle');
     
     var soleus_muscle = new X.object();
     soleus_muscle.load('Model_23_soleus_muscle.vtk');
+    soleus_muscle.setCaption('Soleus muscle');
     
     var tibialis_anterior_muscle = new X.object();
     tibialis_anterior_muscle.load('Model_24_tibialis_anterior_muscle.vtk');
+    tibialis_anterior_muscle.setCaption('Tibialis anterior muscle');
     
     var extensor_digitorum_longus_muscle = new X.object();
     extensor_digitorum_longus_muscle
         .load('Model_25_extensor_digitorum_longus_muscle.vtk');
+    extensor_digitorum_longus_muscle.setCaption('Extensor digitorum longus muscle');
     
     var peroneus_longus_muscle = new X.object();
     peroneus_longus_muscle.load('Model_26_peroneus_longus_muscle.vtk');
+    peroneus_longus_muscle.setCaption('Peroneus longus muscle');
     
     muscles.children().push(vastus_lateralis_muscle);
     muscles.children().push(vastus_medialis_muscle);
@@ -255,20 +297,25 @@
     
     var anterior_cruciate_ligament = new X.object();
     anterior_cruciate_ligament.load('Model_31_anterior_cruciate_ligament.vtk');
+    anterior_cruciate_ligament.setCaption('Anterior cruciate ligament');
     
     var posterior_cruciate_ligament = new X.object();
     posterior_cruciate_ligament
         .load('Model_32_posterior_cruciate_ligament.vtk');
+    posterior_cruciate_ligament.setCaption('Posterior cruciate ligament');
     
     var fibular_collateral_ligament = new X.object();
     fibular_collateral_ligament
         .load('Model_33_fibular_collateral_ligament.vtk');
+    fibular_collateral_ligament.setCaption('Fibular collateral ligament');
     
     var tibial_collateral_ligament = new X.object();
     tibial_collateral_ligament.load('Model_34_tibial_collateral_ligament.vtk');
+    tibial_collateral_ligament.setCaption('Tibial collateral ligament');
     
     var patellar_ligament = new X.object();
     patellar_ligament.load('Model_35_patellar_ligament.vtk');
+    patellar_ligament.setCaption('Patellar ligament');
     
     ligaments.children().push(anterior_cruciate_ligament);
     ligaments.children().push(posterior_cruciate_ligament);
@@ -284,6 +331,7 @@
     
     var infrapatellar_fat_body = new X.object();
     infrapatellar_fat_body.load('Model_9_infrapatellar_fat_body.vtk');
+    infrapatellar_fat_body.setCaption('Infrapatellar fat body');
     
     fat.children().push(infrapatellar_fat_body);
     fat.setColor(0.87, 0.89, 0.58);
