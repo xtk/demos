@@ -1,0 +1,228 @@
+<!-- 
+/*
+ * 
+ *                  xxxxxxx      xxxxxxx
+ *                   x:::::x    x:::::x 
+ *                    x:::::x  x:::::x  
+ *                     x:::::xx:::::x   
+ *                      x::::::::::x    
+ *                       x::::::::x     
+ *                       x::::::::x     
+ *                      x::::::::::x    
+ *                     x:::::xx:::::x   
+ *                    x:::::x  x:::::x  
+ *                   x:::::x    x:::::x 
+ *              THE xxxxxxx      xxxxxxx TOOLKIT
+ *                    
+ *                  http://www.goXTK.com
+ *                   
+ * Copyright (c) 2012 The X Toolkit Developers <dev@goXTK.com>
+ *                   
+ *    The X Toolkit (XTK) is licensed under the MIT License:
+ *      http://www.opensource.org/licenses/mit-license.php
+ *
+ * The used data was created by Michael J. Paldino, Children's Hospital Boston
+ *  http://specialists.childrenshospital.org/directory/profile.asp?dbase=main&setsize=5&pict_id=1937982
+ *
+ * THANK YOU!
+ *
+ */
+-->
+
+<html>
+<head>
+<title>The Fiber Atlas</title>
+
+<script type="text/javascript" src="../xtk.js"></script>
+
+<script type="text/javascript">
+  var run = function() {
+
+    r = new X.renderer('r');
+    r.config.PICKING_ENABLED = false;
+    r.init();
+    
+    complete = new X.object();
+    complete.load('complete.trk');
+    complete.setOpacity(1.0);
+    
+    cc = new X.object();
+    cc.load('CC_track.trk');
+    cc.setCaption('Corpus callosum');
+    
+    laf = new X.object();
+    laf.load('LAF_track.trk');
+    laf.setCaption('Left arcuate fasciculus');
+    
+    raf = new X.object();
+    raf.load('RAF_track.trk');
+    raf.setCaption('Right arcuate fasciculus');
+        
+    lcsp = new X.object();
+    lcsp.load('LCSP_track.trk');
+    lcsp.setCaption('Left cortico spiral tract');
+    
+    rcsp = new X.object();
+    rcsp.load('RCSP_track.trk');
+    rcsp.setCaption('Right cortico spiral tract');
+
+    lifof = new X.object();
+    lifof.load('LIFOF_track.trk');
+    lifof.setCaption('Left inferior fronto-occipital fasciculus');
+    
+    rifof = new X.object();
+    rifof.load('RIFOF_track.trk');
+    rifof.setCaption('Right inferior fronto-occipital fasciculus');
+    
+    lilf = new X.object();
+    lilf.load('LILF_track.trk');
+    lilf.setCaption('Left inferior longitudinal fasciculus');
+    
+    rilf = new X.object();
+    rilf.load('RILF_track.trk');
+    rilf.setCaption('Right inferior longitudinal fasciculus');
+    
+    r.add(complete);
+    r.add(cc);
+    
+    r.add(raf);
+    r.add(laf);
+    
+    r.add(lcsp);
+    r.add(rcsp);
+    
+    r.add(lifof);
+    r.add(rifof);
+    
+    r.add(lilf);
+    r.add(rilf);
+    
+    r.camera().setUp(0,0,1);
+    r.camera().setPosition(-150,0,0);
+    
+    r.render();
+    
+    
+  };
+</script>
+
+
+<style type="text/css">
+body {
+  font-family: sans-serif;
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
+div.logoBox {
+  background-color: #ffffff;
+  width: 20%;
+  float: right;
+  margin-bottom: 10px;
+}
+
+div.anatomyBox {
+  background-color: #000000;
+  width: 20%;
+  height: 63px;
+  float: right;
+  line-height: 63px;
+}
+
+div:hover.anatomyBox {
+  background-color: #736AFF;
+}
+
+div.anatomyBox span {
+  color: #ffffff;
+  font-size: 1.2em;
+  vertical-align: middle;
+  margin-left: 10px;
+  cursor: hand;
+}
+
+.tinyText {
+  font-size: 0.5em;
+}
+</style>
+
+<script type="text/javascript">
+
+  function restore() {
+    
+
+    cc.setVisible(false);
+    laf.setVisible(false);
+    raf.setVisible(false);
+    lcsp.setVisible(false);
+    rcsp.setVisible(false);
+    lifof.setVisible(false);
+    rifof.setVisible(false);
+    lilf.setVisible(false);
+    rilf.setVisible(false);
+    
+    complete.setOpacity(1.0);
+    
+    r.render();
+    
+  }
+
+  function highlight(objectname) {
+    
+    restore();
+
+    complete.setOpacity(0.1);
+    
+    // retrieve object
+    object = eval(objectname);
+    object.setVisible(true);
+    
+    r.render();
+    
+    // update checkbox
+//     document.getElementById(objectname + '_checkbox').checked = object
+//         .visible();
+    
+  }
+</script>
+
+<body onload="run()">
+  
+  <!-- the container for the renderer -->
+  <div id="r" style="background-color: #000000; width: 80%; height: 100%; float: left;"></div>
+
+  <div class="logoBox">
+    <center>
+      <img src="logo_spl.gif" width=60><br> <span>The Fiber Atlas</span><br> <span class="tinyText"><a
+        href="http://www.spl.harvard.edu/publications/item/view/1953"
+        target=_blank>More information</a></span>
+    </center>
+  </div>
+  <div class="anatomyBox" onMouseover="highlight('cc');" onMouseout="restore();">
+    <span>Corpus Callosum</span>
+  </div>      
+  <div class="anatomyBox" onMouseover="highlight('laf');" onMouseout="restore();">
+    <span>Left arcuate fasciculus</span>
+  </div>
+  <div class="anatomyBox" onMouseover="highlight('raf');" onMouseout="restore();">
+    <span>Right arcuate fasciculus</span>
+  </div>
+  <div class="anatomyBox" onMouseover="highlight('lcsp');" onMouseout="restore();">
+    <span>Left cortico spiral tract</span>
+  </div>
+  <div class="anatomyBox" onMouseover="highlight('rcsp');" onMouseout="restore();">
+    <span>Right cortico spiral tract</span>
+  </div>
+  <div class="anatomyBox" onMouseover="highlight('lifof');" onMouseout="restore();">
+    <span>Left inferior fronto-occipital fasciculus</span>
+  </div>
+  <div class="anatomyBox" onMouseover="highlight('rifof');" onMouseout="restore();">
+    <span>Right inferior fronto-occipital fasciculus</span>
+  </div>  
+  <div class="anatomyBox" onMouseover="highlight('lilf');" onMouseout="restore();">
+    <span>Left inferior longitudinal fasciculus</span>
+  </div>
+  <div class="anatomyBox" onMouseover="highlight('rilf');" onMouseout="restore();">
+    <span>Right inferior longitudinal fasciculus</span>
+  </div>  
+</body>
