@@ -170,17 +170,11 @@
     
     // .. curtain up!!
     r.render();
-
   };
   
   function setOpacity(objectname, opacity) {
     
     objectname.setOpacity(eval(opacity/100));
-    
-    // retrieve object
-    objectname.setVisible(true);
-   
-    alert("visibility: " + opacity);
  
     r.render();
   }
