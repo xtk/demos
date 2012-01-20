@@ -160,6 +160,7 @@
     nuclei.children().push(n84);
     
     nuclei.setColor(1, 0, 0);
+    nuclei.setOpacity(1);
     
     // add elements to the scene
     r.add(nuclei);
@@ -174,7 +175,8 @@
   
   function setOpacity(objectname, opacity) {
     
-    objectname.setOpacity(eval(opacity/100));
+    object = eval(objectname);
+    object.setOpacity(eval(opacity/100));
  
     r.render();
   }
@@ -191,7 +193,7 @@ $(function() {
 		slide: function( event, ui ) {
 			$( "#opacitynuclei" ).val( ui.value );
                         $.get('zebrafishdevelopment.html', function(){
-                                                           setOpacity(nuclei, ui.value);});                        
+                                                           setOpacity("nuclei", ui.value);});                        
 		}
 	});
 	$( "#opacitynuclei" ).val( $( "#sliderhorizontalnuclei" ).slider( "value" ) );
