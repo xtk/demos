@@ -182,33 +182,33 @@
 
 <script>
 $(function() {
-	$( "#slider-horizontal-nuclei" ).slider({
+	$( "#sliderhorizontalnuclei" ).slider({
 		orientation: "horizontal",
 		range: "min",
 		min: 0,
 		max: 100,
 		value: 50,
 		slide: function( event, ui ) {
-			$( "#opacity-nuclei" ).val( ui.value );
+			$( "#opacitynuclei" ).val( ui.value );
                         $.get('zebrafishdevelopment.html', function(){
                                                            setOpacity(nuclei, ui.value);});                        
 		}
 	});
-	$( "#opacity-nuclei" ).val( $( "#slider-horizontal-nuclei" ).slider( "value" ) );
+	$( "#opacitynuclei" ).val( $( "#sliderhorizontalnuclei" ).slider( "value" ) );
 
-	$( "#slider-horizontal-membrane" ).slider({
+	$( "#sliderhorizontalmembrane" ).slider({
 		orientation: "horizontal",
 		range: "min",
 		min: 0,
 		max: 100,
 		value: 50,
 		slide: function( event, ui ) {
-			$( "#opacity-membrane" ).val( ui.value );
+			$( "#opacitymembrane" ).val( ui.value );
                         $.get('zebrafishdevelopment.html', function(){
                                                            setOpacity(membrane, ui.value);});                        
 		}
 	});
-	$( "#opacity-membrane" ).val( $( "#slider-horizontal-membrane" ).slider( "value" ) );
+	$( "#opacitymembrane" ).val( $( "#sliderhorizontalmembrane" ).slider( "value" ) );
 });
 </script>
 
@@ -267,16 +267,16 @@ div.anatomyBox span{
   
   <div class="anatomyBox">
     <span>Nuclei</span><br>
-    <label for="opacity-nuclei" style="background-color: #000000; color: #ffffff;">Opacity:</label>
-    <input type="text" id="opacity-nuclei" style="border:0; color:#f6931f; background-color:#000000;font-weight:bold;" />
-      <div id="slider-horizontal-nuclei" align="center"></div>
+    <label for="opacitynuclei" style="background-color: #000000; color: #ffffff;">Opacity:</label>
+    <input type="text" id="opacitynuclei" style="border:0; color:#f6931f; background-color:#000000;font-weight:bold;" />
+      <div id="sliderhorizontalnuclei" align="center"></div>
   </div>      
   
   <div class="anatomyBox">
     <span>Membranes</span><br>
-    <label for="opacity-membrane" style="background-color: #000000; color: #ffffff;">Opacity:</label>
-    <input type="text" id="opacity-membrane" style="border:0; color:#f6931f; background-color:#000000; font-weight:bold;" />
-    <div id="slider-horizontal-membrane" align="center"></div>
+    <label for="opacitymembrane" style="background-color: #000000; color: #ffffff;">Opacity:</label>
+    <input type="text" id="opacitymembrane" style="border:0; color:#f6931f; background-color:#000000; font-weight:bold;" />
+    <div id="sliderhorizontalmembrane" align="center"></div>
   </div>
 
  </body>
