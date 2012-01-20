@@ -173,7 +173,7 @@
     $.r.render();
   };
   
-  function setOpacity(objectname, opacity) {
+  function setElementOpacity(objectname, opacity) {
     
     objectname.setOpacity(eval(opacity/100));
  
@@ -190,7 +190,7 @@
 		slide: function( event, ui ) {
 			$( "#opacitynuclei" ).val( ui.value );
                         $.get('index.html', function(){
-                                                           setOpacity($.nuclei, ui.value);});                        
+                                              setElementOpacity($.nuclei, ui.value);});                        
 		}
 	});
 	$( "#opacitynuclei" ).val( $( "#sliderhorizontalnuclei" ).slider( "value" ) );
@@ -204,7 +204,7 @@
 		slide: function( event, ui ) {
 			$( "#opacitymembrane" ).val( ui.value );
                         $.get('index.html', function(){
-                                                           setOpacity($.membrane, ui.value);});                        
+                                              setElementOpacity($.membrane, ui.value);});                        
 		}
 	});
 	$( "#opacitymembrane" ).val( $( "#sliderhorizontalmembrane" ).slider( "value" ) );
