@@ -46,13 +46,13 @@
 <script type="text/javascript">
   function run() {
 
-    r = new X.renderer('r');
-    r.init();
+    $.r = new X.renderer('r');
+    $.r.init();
     
     //
     // nuclei
     //
-    nuclei = new X.object();
+    $.nuclei = new X.object();
     
     var n59 = new X.object();
     n59.load('nuclei/40_59.vtk');
@@ -163,26 +163,24 @@
     nuclei.setOpacity(0.5);
     
     // add elements to the scene
-    r.add(nuclei);
+    $.r.add(nuclei);
     
     // position the camera for a nice view and set the up-vector for correct orientation
-    r.camera().setUp(0, 0, 1);
-    r.camera().setPosition(-300, 0, 0);
+    $.r.camera().setUp(0, 0, 1);
+    $.r.camera().setPosition(-400, 0, 0);
     
     // .. curtain up!!
-    r.render();
+    $.r.render();
   };
   
   function setOpacity(objectname, opacity) {
     
     objectname.setOpacity(eval(opacity/100));
  
-    r.render();
+    $.r.render();
   }
-</script>
 
-<script>
-$(function() {
+  $(function() {
 	$( "#sliderhorizontalnuclei" ).slider({
 		orientation: "horizontal",
 		range: "min",
