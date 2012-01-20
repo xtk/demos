@@ -160,7 +160,6 @@
     $.nuclei.children().push(n84);
     
     $.nuclei.setColor(1, 0, 0);
-    $.nuclei.setOpacity(0.5);
     
     // add elements to the scene
     $.r.add($.nuclei);
@@ -175,7 +174,7 @@
   
   function setElementOpacity(objectname, opacity) {
     
-    objectname.setOpacity(eval(opacity/100));
+    objectname.setColor(1, eval(opacity/100), eval(opacity/100));
  
     $.r.render();
   }
