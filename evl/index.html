@@ -179,7 +179,7 @@
     $.r.render();
   }
 
-  $(function() {
+  $(document).ready(function(){
 	$( "#sliderhorizontalnuclei" ).slider({
 		orientation: "horizontal",
 		range: "min",
@@ -207,7 +207,8 @@
 		}
 	});
 	$( "#opacitymembrane" ).val( $( "#sliderhorizontalmembrane" ).slider( "value" ) );
-});
+  });
+
 </script>
 
 </head>
