@@ -1,0 +1,187 @@
+<!-- 
+/*
+ * 
+ *                  xxxxxxx      xxxxxxx
+ *                   x:::::x    x:::::x 
+ *                    x:::::x  x:::::x  
+ *                     x:::::xx:::::x   
+ *                      x::::::::::x    
+ *                       x::::::::x     
+ *                       x::::::::x     
+ *                      x::::::::::x    
+ *                     x:::::xx:::::x   
+ *                    x:::::x  x:::::x  
+ *                   x:::::x    x:::::x 
+ *              THE xxxxxxx      xxxxxxx TOOLKIT
+ *                    
+ *                  http://www.goXTK.com
+ *                   
+ * Copyright (c) 2012 The X Toolkit Developers <dev@goXTK.com>
+ *                   
+ *    The X Toolkit (XTK) is licensed under the MIT License:
+ *      http://www.opensource.org/licenses/mit-license.php
+ *
+ * The data used was collected by the Megason Laboratory, Harvard Medical School
+ *
+ *   https://wiki.med.harvard.edu/SysBio/Megason/
+ *
+ * THANK YOU!
+ *
+ */
+-->
+
+<html>
+<head>
+<title>Zebrafish development</title>
+
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/themes/base/jquery-ui.css" type="text/css" media="all" />
+
+<script type="text/javascript" src="http://goXTK.com/xtk.js"></script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.17/jquery-ui.min.js" type="text/javascript"></script>
+<script src="http://jquery-ui.googlecode.com/svn/tags/latest/external/jquery.bgiframe-2.1.2.js" type="text/javascript"></script>
+<script src="http://jquery-ui.googlecode.com/svn/tags/latest/ui/minified/i18n/jquery-ui-i18n.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+  function run() {
+
+    r = new X.renderer('r');
+    r.init();
+    
+    //
+    // nuclei
+    //
+    nuclei = new X.object();
+    
+    var n59 = new X.object();
+    n59.load('nuclei/40_59.vtk');
+    
+    nuclei.children().push(n59);
+    nuclei.setColor(1, 0, 0);
+    
+    // add elements to the scene
+    r.add(nuclei);
+    
+    // position the camera for a nice view and set the up-vector for correct orientation
+    r.camera().setUp(0, 0, 1);
+    r.camera().setPosition(-300, 0, 0);
+    
+    // .. curtain up!!
+    r.render();
+
+  };
+  
+  function setOpacity(objectname, opacity) {
+    
+    objectname.setOpacity(eval(opacity/100));
+    
+    // retrieve object
+    objectname.setVisible(true);
+   
+    alert("visibility: " + opacity);
+ 
+    r.render();
+  }
+</script>
+
+<script>
+$(function() {
+	$( "#slider-horizontal-nuclei" ).slider({
+		orientation: "horizontal",
+		range: "min",
+		min: 0,
+		max: 100,
+		value: 50,
+		slide: function( event, ui ) {
+			$( "#opacity-nuclei" ).val( ui.value );
+                        $.get('zebrafishdevelopment.html', function(){
+                                                           setOpacity(nuclei, ui.value);});                        
+		}
+	});
+	$( "#opacity-nuclei" ).val( $( "#slider-horizontal-nuclei" ).slider( "value" ) );
+
+	$( "#slider-horizontal-membrane" ).slider({
+		orientation: "horizontal",
+		range: "min",
+		min: 0,
+		max: 100,
+		value: 50,
+		slide: function( event, ui ) {
+			$( "#opacity-membrane" ).val( ui.value );
+                        $.get('zebrafishdevelopment.html', function(){
+                                                           setOpacity(membrane, ui.value);});                        
+		}
+	});
+	$( "#opacity-membrane" ).val( $( "#slider-horizontal-membrane" ).slider( "value" ) );
+});
+</script>
+
+</head>
+
+<style type="text/css">
+
+body {
+  font-family: sans-serif;
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
+div.logoBox {
+  background-color: #ffffff;
+  width: 20%;
+  float: right;
+  margin-bottom: 10px;
+}
+
+div.anatomyBox {
+  background-color: #000000;
+  width: 20%;
+  height: 100px;
+  float: right;
+  line-height: 30px;
+  margin-top: 1px;
+}
+
+div.anatomyBox span{
+  color: #ffffff;
+  font-size: 1.2em;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.tinyText {
+  font-size: 0.5em;
+}
+</style>
+
+<body onload="run()">
+  
+  <!-- the container for the renderer -->
+  <div id="r" style="background-color: #000000; width: 80%; height: 100%; float: left;"></div>
+
+  <div class="logoBox">
+    <center>
+      <br>
+      <img src="megasonLabLogo.png" width=100%><br> <span>Zebrafish Development</span><br> <span class="tinyText"><a
+        href="https://wiki.med.harvard.edu/SysBio/Megason/"
+        target=_blank>More information</a></span>
+
+    </center>
+  </div>
+  
+  <div class="anatomyBox">
+    <span>Nuclei</span><br>
+    <label for="opacity-nuclei" style="background-color: #000000; color: #ffffff;">Opacity:</label>
+    <input type="text" id="opacity-nuclei" style="border:0; color:#f6931f; background-color:#000000;font-weight:bold;" />
+      <div id="slider-horizontal-nuclei" align="center"></div>
+  </div>      
+  
+  <div class="anatomyBox">
+    <span>Membranes</span><br>
+    <label for="opacity-membrane" style="background-color: #000000; color: #ffffff;">Opacity:</label>
+    <input type="text" id="opacity-membrane" style="border:0; color:#f6931f; background-color:#000000; font-weight:bold;" />
+    <div id="slider-horizontal-membrane" align="center"></div>
+  </div>
+
+ </body>
