@@ -175,8 +175,7 @@
   
   function setOpacity(objectname, opacity) {
     
-    object = eval(objectname);
-    object.setOpacity(eval(opacity/100));
+    objectname.setOpacity(eval(opacity/100));
  
     r.render();
   }
@@ -193,7 +192,7 @@ $(function() {
 		slide: function( event, ui ) {
 			$( "#opacitynuclei" ).val( ui.value );
                         $.get('zebrafishdevelopment.html', function(){
-                                                           setOpacity("nuclei", ui.value);});                        
+                                                           setOpacity($.nuclei, ui.value);});                        
 		}
 	});
 	$( "#opacitynuclei" ).val( $( "#sliderhorizontalnuclei" ).slider( "value" ) );
@@ -207,7 +206,7 @@ $(function() {
 		slide: function( event, ui ) {
 			$( "#opacitymembrane" ).val( ui.value );
                         $.get('zebrafishdevelopment.html', function(){
-                                                           setOpacity(membrane, ui.value);});                        
+                                                           setOpacity($.membrane, ui.value);});                        
 		}
 	});
 	$( "#opacitymembrane" ).val( $( "#sliderhorizontalmembrane" ).slider( "value" ) );
