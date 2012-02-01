@@ -165,6 +165,100 @@
     // add elements to the scene
     $.r.add($.nuclei);
     
+    //
+    // membrane
+    // 
+    $.membrane = new X.object();
+   
+    var m1 = new X.object();
+    m1.load('membrane/40_1.vtk');
+    var m2 = new X.object();
+    m2.load('membrane/40_2.vtk');
+    var m3 = new X.object();
+    m3.load('membrane/40_3.vtk');
+    var m4 = new X.object();
+    m4.load('membrane/40_4.vtk');
+    var m5 = new X.object();
+    m5.load('membrane/40_5.vtk');
+    var m6 = new X.object();
+    m6.load('membrane/40_6.vtk');
+    var m7 = new X.object();
+    m7.load('membrane/40_7.vtk');
+    var m8 = new X.object();
+    m8.load('membrane/40_8.vtk');
+    var m9 = new X.object();
+    m9.load('membrane/40_9.vtk');
+    var m10 = new X.object();
+    m10.load('membrane/40_10.vtk');
+    var m11 = new X.object();
+    m11.load('membrane/40_11.vtk');
+    var m12 = new X.object();
+    m12.load('membrane/40_12.vtk');
+    var m13 = new X.object();
+    m13.load('membrane/40_13.vtk');
+    var m14 = new X.object();
+    m14.load('membrane/40_14.vtk');
+    var m15 = new X.object();
+    m15.load('membrane/40_15.vtk');
+    var m16 = new X.object();
+    m16.load('membrane/40_16.vtk');
+    var m17 = new X.object();
+    m17.load('membrane/40_17.vtk');
+    var m18 = new X.object();
+    m18.load('membrane/40_18.vtk');
+    var m19 = new X.object();
+    m19.load('membrane/40_19.vtk');
+    var m20 = new X.object();
+    m20.load('membrane/40_20.vtk');
+    var m21 = new X.object();
+    m21.load('membrane/40_21.vtk');
+    var m22 = new X.object();
+    m22.load('membrane/40_22.vtk');
+    var m23 = new X.object();
+    m23.load('membrane/40_23.vtk');
+    var m24 = new X.object();
+    m24.load('membrane/40_24.vtk');
+    var m25 = new X.object();
+    m25.load('membrane/40_25.vtk');
+    var m26 = new X.object();
+    m26.load('membrane/40_26.vtk');
+    var m27 = new X.object();
+    m27.load('membrane/40_27.vtk');
+
+    $.membrane.children().push(m1);
+    $.membrane.children().push(m2);
+    $.membrane.children().push(m3);
+    $.membrane.children().push(m4);
+    $.membrane.children().push(m5);
+    $.membrane.children().push(m6);
+    $.membrane.children().push(m7);
+    $.membrane.children().push(m8);
+    $.membrane.children().push(m9);
+    $.membrane.children().push(m10);
+    $.membrane.children().push(m11);
+    $.membrane.children().push(m12);
+    $.membrane.children().push(m13);
+    $.membrane.children().push(m14);
+    $.membrane.children().push(m15);
+    $.membrane.children().push(m16);
+    $.membrane.children().push(m17);
+    $.membrane.children().push(m18);
+    $.membrane.children().push(m19);
+    $.membrane.children().push(m20);
+    $.membrane.children().push(m21);
+    $.membrane.children().push(m22);
+    $.membrane.children().push(m23);
+    $.membrane.children().push(m24);
+    $.membrane.children().push(m25);
+    $.membrane.children().push(m26;
+    $.membrane.children().push(m27);
+    
+    $.membrane.setColor(0, 1, 0);
+    $.membrane.setOpacity(0.5);
+
+    // add element to the scene
+    $.r.add($.membrane);
+
     // position the camera for a nice view and set the up-vector for correct orientation
     $.r.camera().setUp(0, 0, 1);
     $.r.camera().setPosition(-400, 0, 0);
