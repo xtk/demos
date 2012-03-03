@@ -35,14 +35,14 @@
 <head>
 <title>Brainfibers</title>
 
-<script type="text/javascript" src="http://get.goXTK.com/xtk.js"></script>
+<script type="text/javascript" src="http://get.goXTK.com/xtk_edge.js"></script>
 
 <script type="text/javascript">
   var run = function() {
 
-    r = new X.renderer('r');
-    r.config.PICKING_ENABLED = false;
-    r.init();
+    renderer = new X.renderer('r');
+    renderer.config.PICKING_ENABLED = false;
+    renderer.init();
     
     complete = new X.object();
     complete.load('complete.trk');
@@ -84,25 +84,25 @@
     rilf.load('RILF_track.trk');
     rilf.setCaption('Right inferior longitudinal fasciculus');
     
-    r.add(complete);
-    r.add(cc);
+    renderer.add(complete);
+    renderer.add(cc);
     
-    r.add(raf);
-    r.add(laf);
+    renderer.add(raf);
+    renderer.add(laf);
     
-    r.add(lcsp);
-    r.add(rcsp);
+    renderer.add(lcsp);
+    renderer.add(rcsp);
     
-    r.add(lifof);
-    r.add(rifof);
+    renderer.add(lifof);
+    renderer.add(rifof);
     
-    r.add(lilf);
-    r.add(rilf);
+    renderer.add(lilf);
+    renderer.add(rilf);
     
-    r.camera().setUp(0,0,1);
-    r.camera().setPosition(-150,0,0);
+    renderer.camera().setUp(0,0,1);
+    renderer.camera().setPosition(-150,0,0);
     
-    r.render();
+    renderer.render();
     
     
   };
@@ -165,7 +165,7 @@ div.anatomyBox span {
     
     complete.setOpacity(1.0);
     
-    r.render();
+    renderer.render();
     
   }
 
@@ -179,7 +179,7 @@ div.anatomyBox span {
     object = eval(objectname);
     object.setVisible(true);
     
-    r.render();
+    renderer.render();
     
     // update checkbox
 //     document.getElementById(objectname + '_checkbox').checked = object

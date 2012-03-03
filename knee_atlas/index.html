@@ -34,13 +34,13 @@
 <head>
 <title>The SPL Knee Atlas</title>
 
-<script type="text/javascript" src="http://get.goXTK.com/xtk.js"></script>
+<script type="text/javascript" src="http://get.goXTK.com/xtk_edge.js"></script>
 
 <script type="text/javascript">
   var run = function() {
 
-    r = new X.renderer('r');
-    r.init();
+    renderer = new X.renderer('r');
+    renderer.init();
     
     //
     // bones
@@ -371,22 +371,22 @@
     //
     // Add all knee components to the renderer
     //
-    r.add(bones);
-    r.add(cartilages);
-    r.add(meniscus);
-    r.add(vascular_system);
-    r.add(nerves);
-    r.add(tendons);
-    r.add(muscles);
-    r.add(ligaments);
-    r.add(fat);
+    renderer.add(bones);
+    renderer.add(cartilages);
+    renderer.add(meniscus);
+    renderer.add(vascular_system);
+    renderer.add(nerves);
+    renderer.add(tendons);
+    renderer.add(muscles);
+    renderer.add(ligaments);
+    renderer.add(fat);
     
     // position the camera for a nice view and set the up-vector for correct orientation
-    r.camera().setUp(0, 0, 1);
-    r.camera().setPosition(-300, 0, 0);
+    renderer.camera().setUp(0, 0, 1);
+    renderer.camera().setPosition(-300, 0, 0);
     
     // .. curtain up!!
-    r.render();
+    renderer.render();
     
   };
 </script>
@@ -435,7 +435,7 @@ div.anatomyBox span {
     // toggle visibility
     object.setVisible(!object.visible());
     // re-render
-    r.render();
+    renderer.render();
     
     // update checkbox
     document.getElementById(objectname + '_checkbox').checked = object
