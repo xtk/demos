@@ -32,28 +32,26 @@
 <head>
 <title>Dan's brain</title>
 
-<script type="text/javascript" src="http://get.goXTK.com/xtk_edge.js"></script>
-
+<!-- <script type="text/javascript" src="http://get.goXTK.com/xtk_edge.js"></script> -->
+<!-- <script type="text/javascript" src="../../X/lib/closure-library/closure/goog/base.js"></script> -->
+<!-- <script type="text/javascript" src="../../X/xtk-deps.js"></script> -->
+<script type="text/javascript" src="xtk.js"></script>
 <script type="text/javascript" src="dat.gui.min.js"></script>
 
 <script type="text/javascript">
+
   var run = function() {
     
     var r = new X.renderer('r');
     r.config.STATISTICS_ENABLED = true;
     r.config.PICKING_ENABLED = false;
-    r.config.ORDERING_ENABLED = false;
+    //r.config.ORDERING_ENABLED = false;
     r.init();
     
     var volume = new X.volume();
     volume.load('daniel.nrrd');
     
-    var whitematter = new X.object();
-    whitematter.load('daniel_white_matter.vtk');
-    whitematter.transform().flipX();
-    whitematter.transform().rotateX(90);
-    whitematter.transform().rotateY(180);
-    whitematter.setColor(0.98, 0.98, 0.82);
+
     
     var graymatter = new X.object();
     graymatter.load('daniel_gray_matter.vtk');
@@ -72,15 +70,14 @@
     csf.setColor(0.5,0.5,0.5);    
     
     r.add(volume);
-    r.add(whitematter);
-    r.add(graymatter);
-    r.add(csf);
     
-    r.camera().setUp(1,0,0);
-    r.camera().setPosition(60, 80, 250);
+    //r.camera().setUp(0,0,1);
+    //r.camera().setPosition(60, 80, 250);
     r.render();
     
-    r.onShowtime = function() {      
+/*     r.onShowtime = function() {      
+      
+      volume.volumeRenderingOn();
       
       //
       // The GUI panel
@@ -167,7 +164,97 @@
       });
       
     };
+ */    
+ 
+
+    r.onShowtime = function() {
+      
+      //
+      // The GUI panel
+      //
+      // (we need to create this during onShowtime(..) since we do not know the volume
+      // dimensions before the loading was completed)
+      
+      // a container to perform some actions
+        var loader = {
+          Load:function() {
+
+            // also add a segmentation
+				    var whitematter = new X.object();
+				    whitematter.load('daniel_gray_matter.vtk');
+				    whitematter.setColor(0.98, 0.98, 0.82);            
+            
+            r.onShowtime = function() {
+              
+              
+              
+            };
+            
+            r.add(whitematter);
+            r.render();
+            
+            
+          }
+        };
+      
+      var gui = new dat.GUI();
+      var volumegui = gui.addFolder('Volume');
+      // ,, switch between slicing and volume rendering
+      var vrController = volumegui.add(volume, '_volumeRendering');
+      // .. configure the volume rendering opacity
+      var opacityController = volumegui.add(volume, '_opacity', 0,1);
+      // .. we can threshold
+      var lowerThresholdController = volumegui.add(volume, '_lowerThreshold', volume.scalarRange()[0], volume.scalarRange()[1]);
+      var upperThresholdController = volumegui.add(volume, '_upperThreshold', volume.scalarRange()[0], volume.scalarRange()[1]);
+      var sliceXController = volumegui.add(volume, '_indexX', 0, volume.dimensions()[0]-1);
+      var sliceYController = volumegui.add(volume, '_indexY', 0, volume.dimensions()[1]-1);
+      var sliceZController = volumegui.add(volume, '_indexZ', 0, volume.dimensions()[2]-1);
+      volumegui.open();
+      var modelgui = gui.addFolder('Model');
+      var addModelController = modelgui.add(loader,'Load');
+      modelgui.open();
+      
+      //addModelController.onChange(func)
+      
+      vrController.onChange(function(value) {
+        
+        document.getElementById('r').style.backgroundColor = value ? '#000000' : '#ffffff';
+        
+        volume.modified();
+        r.render();
+      });
+      
+      opacityController.onChange(function(value){
+        volume.modified();
+        r.render();
+      });     
+      
+      lowerThresholdController.onChange(function(value){
+        volume.modified();
+        r.render();
+      });
+
+      upperThresholdController.onChange(function(value){
+        volume.modified();
+        r.render();
+      });     
+      
+      sliceXController.onChange(function(value) {
+        volume.modified();
+        r.render();
+      });
+      sliceYController.onChange(function(value) {
+        volume.modified();
+        r.render();
+      });          
+      sliceZController.onChange(function(value) {
+        volume.modified();
+        r.render();
+      });              
+      
+    };
     
+
 
   };
 </script>
