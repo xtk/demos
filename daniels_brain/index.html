@@ -21,9 +21,9 @@
  *    The X Toolkit (XTK) is licensed under the MIT License:
  *      http://www.opensource.org/licenses/mit-license.php
  *
- * Dan's brain.
+ * Dan's brain in slicing and volume rendering mode.
  *
- * The white/gray matter and CSF was automatically segmented - so it's not quite perfect.
+ * The white/gray matter and CSF models were automatically segmented - so it's not quite perfect.
  *
  */
 -->
@@ -32,141 +32,45 @@
 <head>
 <title>Dan's brain</title>
 
-<!-- <script type="text/javascript" src="http://get.goXTK.com/xtk_edge.js"></script> -->
-<!-- <script type="text/javascript" src="../../X/lib/closure-library/closure/goog/base.js"></script> -->
-<!-- <script type="text/javascript" src="../../X/xtk-deps.js"></script> -->
-<script type="text/javascript" src="xtk.js"></script>
-<script type="text/javascript" src="dat.gui.min.js"></script>
+<script type="text/javascript" src="http://get.goXTK.com/xtk_edge.js"></script>
+<script type="text/javascript" src="http://get.goXTK.com/xtk_xdat.gui.js"></script>
 
 <script type="text/javascript">
 
   var run = function() {
     
     var r = new X.renderer('r');
-    r.config.STATISTICS_ENABLED = true;
+    // we don't need picking here
     r.config.PICKING_ENABLED = false;
-    //r.config.ORDERING_ENABLED = false;
     r.init();
     
+    // load the .nrrd image data
     var volume = new X.volume();
     volume.load('daniel.nrrd');
     
-
+    // we configure the segmentations which are loaded on demand
+    // and are invisible by default
+    var whitematter = new X.object();
+    whitematter.load('daniel_white_matter.vtk');
+    whitematter.setColor(0.98, 0.98, 0.82);      
+    whitematter.setVisible(false);
     
     var graymatter = new X.object();
     graymatter.load('daniel_gray_matter.vtk');
-    graymatter.transform().flipX();
-    graymatter.transform().rotateX(90);
-    graymatter.transform().rotateY(180);
-    graymatter.setOpacity(0.2);
     graymatter.setColor(0,0,1);
-
+    graymatter.setVisible(false);
+    
     var csf = new X.object();
     csf.load('daniel_csf.vtk');
-    csf.transform().flipX();
-    csf.transform().rotateX(90);
-    csf.transform().rotateY(180);
-    csf.setOpacity(0.7);
-    csf.setColor(0.5,0.5,0.5);    
+    csf.setColor(0.5,0.5,0.5);
+    csf.setVisible(false);
     
     r.add(volume);
     
-    //r.camera().setUp(0,0,1);
-    //r.camera().setPosition(60, 80, 250);
+    r.camera().setUp(0,0,1);
+    r.camera().setPosition(700, 80, 80);
     r.render();
-    
-/*     r.onShowtime = function() {      
-      
-      volume.volumeRenderingOn();
-      
-      //
-      // The GUI panel
-      //
-      // (we need to create this during onShowtime(..) since we do not know the volume
-      // dimensions before the loading was completed)
-      var gui = new dat.GUI();
-      
-      //
-      // models gui
-      //
-      var modelsgui = gui.addFolder('Models');
-      modelsgui.open();
-      var wmgui = modelsgui.addFolder('White matter');
-      var wmVisibleController = wmgui.add(whitematter,'_visible');
-      var wmColorController = wmgui.addColor(whitematter, '_color');
-      wmgui.open();
-      
-      var gmgui = modelsgui.addFolder('Gray matter');
-      var gmVisibleController = gmgui.add(graymatter,'_visible');
-      var gmOpacityController = gmgui.add(graymatter, '_opacity', 0, 1);
-      var gmColorController = gmgui.addColor(graymatter, '_color');
-      gmgui.open();
-      
-      var csfgui = modelsgui.addFolder('Cerebrospinal fluid');
-      var csfVisibleController = csfgui.add(csf,'_visible');
-      var csfOpacityController = csfgui.add(csf, '_opacity', 0, 1);
-      var csfColorController = csfgui.addColor(csf, '_color');      
-      csfgui.open();
-      
-      wmVisibleController.onChange(function(value) {
-        r.render();
-      });
-      wmColorController.onChange(function(value) {
-        r.render();
-      });  
-
-      gmVisibleController.onChange(function(value) {
-        r.render();
-      });
-      gmOpacityController.onChange(function(value) {
-        r.render();
-      });      
-      gmColorController.onChange(function(value) {
-        r.render();
-      });      
-
-      csfVisibleController.onChange(function(value) {
-        r.render();
-      });
-      csfOpacityController.onChange(function(value) {
-        r.render();
-      });      
-      csfColorController.onChange(function(value) {
-        r.render();
-      });            
-      
-      // 
-      // volume gui
-      //
-      var volumegui = gui.addFolder('Volume');
-      var sliceXController = volumegui.add(volume, '_indexX', 0, volume
-          .dimensions()[0] - 1);
-      var sliceYController = volumegui.add(volume, '_indexY', 0, volume
-          .dimensions()[1] - 1);
-      var sliceZController = volumegui.add(volume, '_indexZ', 0, volume
-          .dimensions()[2] - 1);
-      volumegui.open();
-      
-      sliceXController.onChange(function(value) {
-
-        volume.modified();
-        r.render();
-      });
-      sliceYController.onChange(function(value) {
-
-        volume.modified();
-        r.render();
-      });
-      sliceZController.onChange(function(value) {
-
-        volume.modified();
-        r.render();
-      });
-      
-    };
- */    
  
-
     r.onShowtime = function() {
       
       //
@@ -175,27 +79,10 @@
       // (we need to create this during onShowtime(..) since we do not know the volume
       // dimensions before the loading was completed)
       
-      // a container to perform some actions
-        var loader = {
-          Load:function() {
-
-            // also add a segmentation
-				    var whitematter = new X.object();
-				    whitematter.load('daniel_gray_matter.vtk');
-				    whitematter.setColor(0.98, 0.98, 0.82);            
-            
-            r.onShowtime = function() {
-              
-              
-              
-            };
-            
-            r.add(whitematter);
-            r.render();
-            
-            
-          }
-        };
+      // the models were not loaded yet
+      var wmWasLoaded = false;
+      var gmWasLoaded = false;
+      var csfWasLoaded = false;
       
       var gui = new dat.GUI();
       var volumegui = gui.addFolder('Volume');
@@ -210,15 +97,39 @@
       var sliceYController = volumegui.add(volume, '_indexY', 0, volume.dimensions()[1]-1);
       var sliceZController = volumegui.add(volume, '_indexZ', 0, volume.dimensions()[2]-1);
       volumegui.open();
-      var modelgui = gui.addFolder('Model');
-      var addModelController = modelgui.add(loader,'Load');
-      modelgui.open();
+      
+      var modelsgui = gui.addFolder('Models');
+      var wmgui = modelsgui.addFolder('White matter');
+      var wmVisibleController = wmgui.add(whitematter,'_visible');
+      var wmColorController = wmgui.addColor(whitematter, '_color');
+      wmgui.open();
+      
+      var gmgui = modelsgui.addFolder('Gray matter');
+      var gmVisibleController = gmgui.add(graymatter,'_visible');
+      var gmColorController = gmgui.addColor(graymatter, '_color');
+      gmgui.open();
+      
+      var csfgui = modelsgui.addFolder('Cerebrospinal fluid');
+      var csfVisibleController = csfgui.add(csf,'_visible');
+      var csfColorController = csfgui.addColor(csf, '_color');      
+      csfgui.open();      
+ 
+      modelsgui.open();
       
       //addModelController.onChange(func)
       
       vrController.onChange(function(value) {
         
         document.getElementById('r').style.backgroundColor = value ? '#000000' : '#ffffff';
+        
+        // these settings make the volume rendering look good
+        volume.setOpacity(0.15);
+        volume.threshold(70, volume.scalarRange()[1]);
+        
+        // Iterate over the gui controllers to grab updated values
+        for (var i in volumegui.__controllers) {
+          volumegui.__controllers[i].updateDisplay();
+        }        
         
         volume.modified();
         r.render();
@@ -251,6 +162,55 @@
         volume.modified();
         r.render();
       });              
+      
+
+      wmVisibleController.onChange(function(value) {
+        
+        if (!wmWasLoaded) {
+          
+          r.add(whitematter);
+          r.onShowtime = function() {};
+          wmWasLoaded = true;
+          
+        }
+        
+        r.render();
+      });
+      wmColorController.onChange(function(value) {
+        r.render();
+      });  
+
+      gmVisibleController.onChange(function(value) {
+        
+        if (!gmWasLoaded) {
+          
+          r.add(graymatter);
+          r.onShowtime = function() {};
+          gmWasLoaded = true;
+          
+        }        
+        
+        r.render();
+      });
+      gmColorController.onChange(function(value) {
+        r.render();
+      });      
+
+      csfVisibleController.onChange(function(value) {
+        
+        if (!csfWasLoaded) {
+          
+          r.add(csf);
+          r.onShowtime = function() {};
+          csfWasLoaded = true;
+          
+        }        
+        
+        r.render();
+      });
+      csfColorController.onChange(function(value) {
+        r.render();
+      });                  
       
     };
     
