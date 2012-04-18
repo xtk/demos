@@ -1,0 +1,177 @@
+<!-- 
+/*
+ * 
+ *                  xxxxxxx      xxxxxxx
+ *                   x:::::x    x:::::x 
+ *                    x:::::x  x:::::x  
+ *                     x:::::xx:::::x   
+ *                      x::::::::::x    
+ *                       x::::::::x     
+ *                       x::::::::x     
+ *                      x::::::::::x    
+ *                     x:::::xx:::::x   
+ *                    x:::::x  x:::::x  
+ *                   x:::::x    x:::::x 
+ *              THE xxxxxxx      xxxxxxx TOOLKIT
+ *                    
+ *                  http://www.goXTK.com
+ *                   
+ * Copyright (c) 2012 The X Toolkit Developers <dev@goXTK.com>
+ *                   
+ *    The X Toolkit (XTK) is licensed under the MIT License:
+ *      http://www.opensource.org/licenses/mit-license.php
+ *
+ * A teenage brain (14 yr).
+ */
+-->
+
+<html>
+<head>
+<title>TEENAGE BRAIN</title>
+
+<script type="text/javascript" src="http://get.goxtk.com/xtk.js"></script>
+<script type="text/javascript" src="http://get.goXTK.com/xtk_xdat.gui.js"></script>
+
+<script type="text/javascript">
+  var run = function() {
+    
+    ren = new X.renderer('r');
+    ren.init();
+    
+    volume = new X.volume();
+    volume.load('orig.mgz');
+    volume.labelMap().load('aseg.mgz');
+    volume.labelMap().setColorTable('genericanatomy.txt');
+    
+    lh = new X.object();
+    lh.load('lh.smoothwm.fsm');
+    lh.transform().rotateY(90);
+    rh = new X.object();
+    rh.load('rh.smoothwm.fsm');
+    rh.transform().rotateY(90);
+    
+    tracks = new X.object();
+    tracks.load('brainfibers.trk');
+    //
+    // mri_info /net/pretoria/local_mount/space/pretoria/2/chb/users/daniel.haehn/tmp/banudata/3-cmt/NIFTI/Diffusion_b0_resampld.nii.gz   --vox2ras-tkr
+    // 
+    // and add the spacings in the matrix 1.96,1.96,2 (watch out for switched rows)
+    // then, invert the Z translation on row 2
+    tracks.transform().setMatrix(new X.matrix([[  -1.96000,    0.00000 ,   0.00000 , 110.00000 ],
+   [0.00000 ,   0.00000  ,  -2.0000 , 76.00000 ],
+   [0.00000 ,  -1.9600  ,  0.00000,  110.00000 ],
+   [0.00000  ,  0.00000 ,   0.00000 ,   1.00000 ]]
+));
+    
+    ren.add(volume);
+    ren.add(lh);
+    ren.add(rh);
+    ren.add(tracks);
+    
+    ren.camera().setPosition(120,80,160);
+    ren.render();
+    
+    
+    
+    var _volumeflipped = false;
+    ren.onShowtime = function() {
+
+      if (!_volumeflipped) {
+        // flip the volume
+        for (c in volume.children()) { for (d in volume.children()[c].children()) { volume.children()[c].children()[d].transform().flipX() } }
+        // only once so
+        _volumeflipped = true;
+      }
+      
+      ren.resetBoundingBox();
+      
+      //
+      // The GUI panel
+      //
+      // (we need to create this during onShowtime(..) since we do not know the volume
+      // dimensions before the loading was completed)
+      
+      var modelWasLoaded = false;
+      
+      var gui = new dat.GUI();
+      var volumegui = gui.addFolder('Volume');
+      // ,, switch between slicing and volume rendering
+      var vrController = volumegui.add(volume, '_volumeRendering');
+      // .. configure the volume rendering opacity
+      var opacityController = volumegui.add(volume, '_opacity', 0,1);
+      // .. we can threshold
+      var lowerThresholdController = volumegui.add(volume, '_lowerThreshold', volume.scalarRange()[0], volume.scalarRange()[1]);
+      var upperThresholdController = volumegui.add(volume, '_upperThreshold', volume.scalarRange()[0], volume.scalarRange()[1]);
+      var sliceXController = volumegui.add(volume, '_indexX', 0, volume.dimensions()[0]-1);
+      var sliceYController = volumegui.add(volume, '_indexY', 0, volume.dimensions()[1]-1);
+      var sliceZController = volumegui.add(volume, '_indexZ', 0, volume.dimensions()[2]-1);
+      volumegui.open();
+      
+      var labelmapgui = gui.addFolder('Label Map');
+      var labelMapVisibleController = labelmapgui.add(volume.labelMap(),'_visible');
+      var labelMapOpacityController = labelmapgui.add(volume.labelMap(),'_opacity',0,1);
+      labelmapgui.open();
+      
+      // volumegui callbacks
+      vrController.onChange(function(value) {
+        
+        document.getElementById('r').style.backgroundColor = value ? '#000000' : '#ffffff';
+        
+        // this setting makes the volume rendering look good
+        volume.setOpacity(0.15);
+        
+        // Iterate over the gui controllers to grab updated values
+        for (var i in volumegui.__controllers) {
+          volumegui.__controllers[i].updateDisplay();
+        }                
+        
+        volume.modified();
+        ren.render();
+      });
+      opacityController.onChange(function(value){
+        volume.modified();
+        ren.render();
+      });     
+      lowerThresholdController.onChange(function(value){
+        volume.modified();
+        ren.render();
+      });
+      upperThresholdController.onChange(function(value){
+        volume.modified();
+        ren.render();
+      });     
+      sliceXController.onChange(function(value) {
+        volume.modified();
+        ren.render();
+      });
+      sliceYController.onChange(function(value) {
+        volume.modified();
+        ren.render();
+      });          
+      sliceZController.onChange(function(value) {
+        volume.modified();
+        ren.render();
+      });                              
+      
+      // labelmapgui callbacks
+      labelMapVisibleController.onChange(function(value) {
+        volume.labelMap().modified();
+        ren.render();
+      });
+      labelMapOpacityController.onChange(function(value) {
+        volume.labelMap().modified();
+        ren.render();
+      });
+      
+    };
+    
+    
+  };
+</script>
+
+<body onload="run()" style="margin:0px;">
+  
+  <!-- the container for the renderer -->
+  <div id="r" style="background-color: #ffffff; width: 100%; height: 100%;"></div>
+    
+</body>
