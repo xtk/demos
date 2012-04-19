@@ -29,27 +29,47 @@
 <head>
 <title>TEENAGE BRAIN</title>
 
-<script type="text/javascript" src="http://get.goxtk.com/xtk.js"></script>
+<script type="text/javascript" src="http://get.goxtk.com/xtk_edge.js"></script>
 <script type="text/javascript" src="http://get.goXTK.com/xtk_xdat.gui.js"></script>
 
 <script type="text/javascript">
+
   var run = function() {
     
+    console.time('loading completed');
+    
+    //
+    // START OF VISUALIZATION CODE
+    //    
     ren = new X.renderer('r');
+    ren.config.PICKING_ENABLED = false;
     ren.init();
     
+    //
+    // Volume + LabelMap
+    //
     volume = new X.volume();
-    volume.load('orig.mgz');
-    volume.labelMap().load('aseg.mgz');
-    volume.labelMap().setColorTable('genericanatomy.txt');
+    volume.load('orig.mgh');
+    volume.labelMap().load('aseg.mgh');
+    volume.labelMap().setColorTable('FreeSurferColorLUT.txt');
     
+    //
+    // SURFACES
+    //
     lh = new X.object();
     lh.load('lh.smoothwm.fsm');
     lh.transform().rotateY(90);
+    lh.setScalars('lh.smoothwm.C.crv');    
+    lh.setOpacity(0.7);
     rh = new X.object();
     rh.load('rh.smoothwm.fsm');
     rh.transform().rotateY(90);
+    rh.setScalars('rh.smoothwm.C.crv');
+    rh.setOpacity(0.7);
     
+    //
+    // TRACKS
+    //
     tracks = new X.object();
     tracks.load('brainfibers.trk');
     //
@@ -57,11 +77,13 @@
     // 
     // and add the spacings in the matrix 1.96,1.96,2 (watch out for switched rows)
     // then, invert the Z translation on row 2
-    tracks.transform().setMatrix(new X.matrix([[  -1.96000,    0.00000 ,   0.00000 , 110.00000 ],
-   [0.00000 ,   0.00000  ,  -2.0000 , 76.00000 ],
-   [0.00000 ,  -1.9600  ,  0.00000,  110.00000 ],
-   [0.00000  ,  0.00000 ,   0.00000 ,   1.00000 ]]
-));
+    tracks.transform().setMatrix(new X.matrix([
+     [  -1.96000,    0.00000 ,   0.00000 , 110.00000 ],
+	   [0.00000 ,   0.00000  ,  -2.0000 , 76.00000 ],
+	   [0.00000 ,  -1.9600  ,  0.00000,  110.00000 ],
+	   [0.00000  ,  0.00000 ,   0.00000 ,   1.00000 ]]
+    ));
+    
     
     ren.add(volume);
     ren.add(lh);
@@ -69,21 +91,64 @@
     ren.add(tracks);
     
     ren.camera().setPosition(120,80,160);
+    ren.camera().setUp(0,-1,0);
     ren.render();
+    //
+    // END OF VISUALIZATION CODE
+    //
     
     
     
-    var _volumeflipped = false;
+    
+    
+    //
+    // ON SHOWTIME (gets executed, when all loading is done)
+    //
+    gui = null; // we need to re-load the gui after we change the curvature type
+    // here are the available curvature types and files
+    curvatureTypes = ['C (mm&#x207b;&sup2;)','k&#x2081; (mm&#x207b;&sup1;)','H (mm&#x207b;&sup1;)'];
+    curvatureFiles = ['smoothwm.C.crv','smoothwm.K1.crv','smoothwm.H.crv'];
+    
+    // we need this Loader as a container for dat.gui
+    var Loader = function() {
+              
+      // default type
+      this.RhType = 'C (mm&#x207b;&sup2;)'
+      this.LhType = 'C (mm&#x207b;&sup2;)'
+      
+    }
+    var _loader = new Loader();   
+    
     ren.onShowtime = function() {
-
-      if (!_volumeflipped) {
+      
+      if (gui) {
+        
+        // if we already have a gui, destroy it
+        // .. it will be re-created immediately
+        gui.destroy();
+        gui = null;
+        
+      } else {
+        
+        // some startup stuff can be executed here
+        
         // flip the volume
         for (c in volume.children()) { for (d in volume.children()[c].children()) { volume.children()[c].children()[d].transform().flipX() } }
         // only once so
         _volumeflipped = true;
+        
+        // center everything at 0,0,0 - no matter how the bounding box looks
+        ren.resetBoundingBox();
+        
+        // default threshold for tracks
+        tracks.scalars()['_minThreshold'] = 20;
+        
+        console.timeEnd('loading completed');
+        
       }
       
-      ren.resetBoundingBox();
+
+      
       
       //
       // The GUI panel
@@ -91,9 +156,12 @@
       // (we need to create this during onShowtime(..) since we do not know the volume
       // dimensions before the loading was completed)
       
-      var modelWasLoaded = false;
       
-      var gui = new dat.GUI();
+      gui = new dat.GUI();
+      
+      //
+      // Volume GUI
+      //
       var volumegui = gui.addFolder('Volume');
       // ,, switch between slicing and volume rendering
       var vrController = volumegui.add(volume, '_volumeRendering');
@@ -105,12 +173,54 @@
       var sliceXController = volumegui.add(volume, '_indexX', 0, volume.dimensions()[0]-1);
       var sliceYController = volumegui.add(volume, '_indexY', 0, volume.dimensions()[1]-1);
       var sliceZController = volumegui.add(volume, '_indexZ', 0, volume.dimensions()[2]-1);
-      volumegui.open();
-      
-      var labelmapgui = gui.addFolder('Label Map');
+
+      var labelmapgui = volumegui.addFolder('Label Map');
       var labelMapVisibleController = labelmapgui.add(volume.labelMap(),'_visible');
       var labelMapOpacityController = labelmapgui.add(volume.labelMap(),'_opacity',0,1);
-      labelmapgui.open();
+      labelmapgui.open();      
+      
+      // 
+      // Meshes GUI
+      //
+      var modelgui = gui.addFolder('Surface Models');
+      modelgui.open();
+      
+      var lhgui = modelgui.addFolder('Left Hemisphere');
+      var lhVisibleController = lhgui.add(lh,'_visible');
+      var lhOpacityController = lhgui.add(lh, '_opacity', 0, 1);
+      var lhColorController = lhgui.addColor(lh, '_color');
+      lhgui.open();
+      
+      var lhcurvgui = lhgui.addFolder('Curvature');
+      var lhtypeController = lhcurvgui.add(_loader,'LhType',curvatureTypes);
+      var lhminColorController = lhcurvgui.addColor(lh.scalars(), '_minColor');
+      var lhmaxColorController = lhcurvgui.addColor(lh.scalars(), '_maxColor');
+      var lhminThresholdController = lhcurvgui.add(lh.scalars(), '_minThreshold', lh.scalars().min(), lh.scalars().max());
+      var lhmaxThresholdController = lhcurvgui.add(lh.scalars(), '_maxThreshold', lh.scalars().min(), lh.scalars().max());
+      lhcurvgui.open();            
+      
+      var rhgui = modelgui.addFolder('Right Hemisphere');
+      var rhVisibleController = rhgui.add(rh,'_visible');    
+      var rhOpacityController = rhgui.add(rh, '_opacity', 0, 1);
+      var rhColorController = rhgui.addColor(rh, '_color');
+      rhgui.open();      
+      
+      var rhcurvgui = rhgui.addFolder('Curvature');
+      var rhtypeController = rhcurvgui.add(_loader,'RhType',curvatureTypes);
+      var rhminColorController = rhcurvgui.addColor(rh.scalars(), '_minColor');
+      var rhmaxColorController = rhcurvgui.addColor(rh.scalars(), '_maxColor');
+      var rhminThresholdController = rhcurvgui.add(rh.scalars(), '_minThreshold', rh.scalars().min(), rh.scalars().max());
+      var rhmaxThresholdController = rhcurvgui.add(rh.scalars(), '_maxThreshold', rh.scalars().min(), rh.scalars().max());
+      rhcurvgui.open();      
+      
+      
+      //
+      // Tracks GUI
+      //
+      var trackgui = gui.addFolder('Fiber Tracks');
+      var trackVisibleController = trackgui.add(tracks,'_visible');
+      var trackLengthThresholdController = trackgui.add(tracks.scalars(), '_minThreshold', tracks.scalars().min(), tracks.scalars().max());
+      trackgui.open();      
       
       // volumegui callbacks
       vrController.onChange(function(value) {
@@ -160,6 +270,112 @@
       });
       labelMapOpacityController.onChange(function(value) {
         volume.labelMap().modified();
+        ren.render();
+      });
+      
+      // meshesgui callbacks
+	    lhVisibleController.onChange(function(value) {
+	      ren.render();
+	    });      
+	    
+	    lhOpacityController.onChange(function(value) {
+	      ren.render();
+	    });    
+	
+	    lhColorController.onChange(function(value) {
+	      ren.render();
+	    });        
+	    
+	    rhVisibleController.onChange(function(value) {
+	      ren.render();
+	    });      
+	    
+	    rhOpacityController.onChange(function(value) {
+	      ren.render();
+	    });            
+	
+	    rhColorController.onChange(function(value) {
+	      ren.render();
+	    });              
+
+      //
+      // Change the curvature type callback
+      //
+      lhtypeController.onChange(function(value) {
+        
+        var _index = curvatureTypes.indexOf(value);
+        
+        // we need to buffer the (maybe changed) colors
+        // else wise we would start with the default red<->green mapping
+        var oldMinColor = lh.scalars().colorRange()[0];
+        var oldMaxColor = lh.scalars().colorRange()[1];                    
+        
+        lh.setScalars('lh.'+curvatureFiles[_index]);
+        lh.modified();
+
+        lh.scalars().setColorRange(oldMinColor,oldMaxColor);
+                  
+        // this render call will trigger the onShowtime function again to re-create the GUI
+        ren.render();        
+        
+      });
+      
+      lhminColorController.onChange(function(value) {
+        ren.render();
+      });              
+
+      lhmaxColorController.onChange(function(value) {
+        ren.render();
+      });                    
+      
+      lhminThresholdController.onChange(function(value) {
+        ren.render();
+      });              
+
+      lhmaxThresholdController.onChange(function(value) {
+        ren.render();
+      });           
+      rhtypeController.onChange(function(value) {
+        
+        var _index = curvatureTypes.indexOf(value);
+        
+        // we need to buffer the (maybe changed) colors
+        // else wise we would start with the default red<->green mapping
+        var oldMinColor = rh.scalars().colorRange()[0];
+        var oldMaxColor = rh.scalars().colorRange()[1];                    
+        
+        rh.setScalars('rh.'+curvatureFiles[_index]);
+        rh.modified();
+
+        rh.scalars().setColorRange(oldMinColor,oldMaxColor);
+                  
+        // this render call will trigger the onShowtime function again to re-create the GUI
+        ren.render();        
+        
+      });
+      
+      rhminColorController.onChange(function(value) {
+        ren.render();
+      });              
+
+      rhmaxColorController.onChange(function(value) {
+        ren.render();
+      });                    
+      
+      rhminThresholdController.onChange(function(value) {
+        ren.render();
+      });              
+
+      rhmaxThresholdController.onChange(function(value) {
+        ren.render();
+      });                   	    
+      
+      // trackgui callbacks
+      trackVisibleController.onChange(function(value){
+        ren.render();
+      });     
+      trackLengthThresholdController.onChange(function(value){
+        volume.modified();
         ren.render();
       });
       
