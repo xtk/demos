@@ -57,8 +57,8 @@ goog.require('X.object');
     // Volume + LabelMap
     //
     volume = new X.volume();
-    volume.load('orig.nrrd');
-    volume.labelMap().load('aseg.nrrd');
+    volume.load('orig.mgh');
+    volume.labelMap().load('aseg.mgh');
     volume.labelMap().setColorTable('FreeSurferColorLUT.txt');
     
     //
@@ -96,7 +96,7 @@ goog.require('X.object');
     ren.add(volume);
     ren.add(lh);
     ren.add(rh);
-    ren.add(tracks);
+    //ren.add(tracks);
     
     ren.camera().setPosition(120,80,160);
     ren.camera().setUp(0,-1,0);
@@ -159,7 +159,7 @@ goog.require('X.object');
         ren.resetBoundingBox();
         
         // default threshold for tracks
-        tracks.scalars()['_minThreshold'] = 20;
+        //tracks.scalars()['_minThreshold'] = 20;
         
         console.timeEnd('loading completed');
         
@@ -245,11 +245,11 @@ goog.require('X.object');
       //
       // Tracks GUI
       //
-      var trackgui = gui.addFolder('Fiber Tracks');
-      var trackVisibleController = trackgui.add(tracks, '_visible');
-      var trackLengthThresholdController = trackgui.add(tracks.scalars(),
-          '_minThreshold', tracks.scalars().min(), tracks.scalars().max());
-      trackgui.open();
+//       var trackgui = gui.addFolder('Fiber Tracks');
+//       var trackVisibleController = trackgui.add(tracks, '_visible');
+//       var trackLengthThresholdController = trackgui.add(tracks.scalars(),
+//           '_minThreshold', tracks.scalars().min(), tracks.scalars().max());
+//       trackgui.open();
       
       // volumegui callbacks
       vrController.onChange(function(value) {
@@ -424,15 +424,15 @@ goog.require('X.object');
       });
       
       // trackgui callbacks
-      trackVisibleController.onChange(function(value) {
+//       trackVisibleController.onChange(function(value) {
 
-        ren.render();
-      });
-      trackLengthThresholdController.onChange(function(value) {
+//         ren.render();
+//       });
+//       trackLengthThresholdController.onChange(function(value) {
 
-        volume.modified();
-        ren.render();
-      });
+//         volume.modified();
+//         ren.render();
+//       });
       
     };
     
