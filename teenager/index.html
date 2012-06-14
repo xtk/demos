@@ -29,18 +29,11 @@
 <head>
 <title>TEENAGE BRAIN</title>
 
-<!-- <script type="text/javascript" src="../../X/lib/closure-library/closure/goog/base.js"></script> -->
-<!-- <script type="text/javascript" src="../../X/xtk-deps.js"></script> -->
-<!-- <script type="text/javascript" src="xtk.js"></script> -->
 <script type="text/javascript" src="http://get.goxtk.com/xtk_edge.js"></script>
 <script type="text/javascript" src="http://get.goXTK.com/xtk_xdat.gui.js"></script>
 
 <script type="text/javascript">
 
-
-// goog.require('X.renderer');
-// goog.require('X.volume');
-// goog.require('X.object');
   var run = function() {
     
     console.time('loading completed');
@@ -48,49 +41,47 @@
     //
     // START OF VISUALIZATION CODE
     //    
-    ren = new X.renderer('r');
-    ren.config.PICKING_ENABLED = false;
-    //ren.config.ORDERING_ENABLED = false;
+    ren = new X.renderer3D();
     ren.init();
     
     //
     // Volume + LabelMap
     //
     volume = new X.volume();
-    volume.load('orig.mgh');
-    volume.labelMap().load('aseg.mgh');
-    volume.labelMap().setColorTable('FreeSurferColorLUT.txt');
+    volume.file = 'orig.mgh';
+    volume.labelmap.file = 'aseg.mgh';
+    volume.labelmap.colortable.file = 'FreeSurferColorLUT.txt';
     
     //
     // SURFACES
     //
-    lh = new X.object();
-    lh.load('lh.smoothwm.fsm');
-    lh.transform().rotateY(90);
-    lh.setScalars('lh.smoothwm.C.crv');    
-    lh.setOpacity(0.7);
-    rh = new X.object();
-    rh.load('rh.smoothwm.fsm');
-    rh.transform().rotateY(90);
-    rh.setScalars('rh.smoothwm.C.crv');
-    rh.setOpacity(0.7);
+    lh = new X.mesh();
+    lh.file = 'lh.smoothwm.fsm';
+    lh.transform.rotateY(90);
+    lh.scalars.file = 'lh.smoothwm.C.crv';    
+    lh.opacity = 0.7;
+    rh = new X.mesh();
+    rh.file = 'rh.smoothwm.fsm';
+    rh.transform.rotateY(90);
+    rh.scalars.file = 'rh.smoothwm.C.crv';    
+    rh.opacity = 0.7;
     
     //
     // TRACKS
     //
-    tracks = new X.object();
-    tracks.load('brainfibers.trk');
+    tracks = new X.fibers();
+    tracks.file = 'brainfibers.trk';
     //
     // mri_info /net/pretoria/local_mount/space/pretoria/2/chb/users/daniel.haehn/tmp/banudata/3-cmt/NIFTI/Diffusion_b0_resampld.nii.gz   --vox2ras-tkr
     // 
     // and add the spacings in the matrix 1.96,1.96,2 (watch out for switched rows)
     // then, invert the Z translation on row 2
-    tracks.transform().setMatrix(new X.matrix([
+    tracks.transform.matrix = new X.matrix([
      [  -1.96000,    0.00000 ,   0.00000 , 110.00000 ],
 	   [0.00000 ,   0.00000  ,  -2.0000 , 76.00000 ],
 	   [0.00000 ,  -1.9600  ,  0.00000,  110.00000 ],
 	   [0.00000  ,  0.00000 ,   0.00000 ,   1.00000 ]]
-    ));
+    );
     
     
     ren.add(volume);
@@ -98,8 +89,8 @@
     ren.add(rh);
     ren.add(tracks);
     
-    ren.camera().setPosition(120,80,160);
-    ren.camera().setUp(0,-1,0);
+    ren.camera.position = [120,80,160];
+    ren.camera.up = [0,-1,0];
     ren.render();
     //
     // END OF VISUALIZATION CODE
@@ -140,13 +131,13 @@
         
         // flip the volume
 
-        for (c in volume.children()) {
-          for (d in volume.children()[c].children()) {
-            volume.children()[c].children()[d].transform().flipX();
+        for (c in volume.children) {
+          for (d in volume.children[c].children) {
+            volume.children[c].children[d].transform.flipX();
             
-            for (b in volume.children()[c].children()[d].children()) {
+            for (b in volume.children[c].children[d].children) {
               
-              volume.children()[c].children()[d].children()[b].transform().flipX();
+              volume.children[c].children[d].children[b].transform.flipX();
               
             }
             
@@ -159,13 +150,12 @@
         ren.resetBoundingBox();
         
         // default threshold for tracks
-        tracks.scalars()['_minThreshold'] = 20;
+        tracks.scalars.lowerThreshold = 20;
         
         console.timeEnd('loading completed');
         
       }
       
-
 
       //
       // The GUI panel
@@ -181,26 +171,26 @@
       //
       var volumegui = gui.addFolder('Volume');
       // ,, switch between slicing and volume rendering
-      var vrController = volumegui.add(volume, '_volumeRendering');
+      var vrController = volumegui.add(volume, 'volumeRendering');
       // .. configure the volume rendering opacity
-      var opacityController = volumegui.add(volume, '_opacity', 0, 1);
+      var opacityController = volumegui.add(volume, 'opacity', 0, 1);
       // .. we can threshold
-      var lowerThresholdController = volumegui.add(volume, '_lowerThreshold',
-          volume.scalarRange()[0], volume.scalarRange()[1]);
-      var upperThresholdController = volumegui.add(volume, '_upperThreshold',
-          volume.scalarRange()[0], volume.scalarRange()[1]);
-      var sliceXController = volumegui.add(volume, '_indexX', 0, volume
-          .dimensions()[0] - 1);
-      var sliceYController = volumegui.add(volume, '_indexY', 0, volume
-          .dimensions()[1] - 1);
-      var sliceZController = volumegui.add(volume, '_indexZ', 0, volume
-          .dimensions()[2] - 1);
+      var lowerThresholdController = volumegui.add(volume, 'lowerThreshold',
+          volume.min, volume.max);
+      var upperThresholdController = volumegui.add(volume, 'upperThreshold',
+          volume.min, volume.max);
+      var sliceXController = volumegui.add(volume, 'indexX', 0, volume
+          .dimensions[0] - 1);
+      var sliceYController = volumegui.add(volume, 'indexY', 0, volume
+          .dimensions[1] - 1);
+      var sliceZController = volumegui.add(volume, 'indexZ', 0, volume
+          .dimensions[2] - 1);
       
       var labelmapgui = volumegui.addFolder('Label Map');
-      var labelMapVisibleController = labelmapgui.add(volume.labelMap(),
-          '_visible');
-      var labelMapOpacityController = labelmapgui.add(volume.labelMap(),
-          '_opacity', 0, 1);
+      var labelMapVisibleController = labelmapgui.add(volume.labelmap,
+          'visible');
+      var labelMapOpacityController = labelmapgui.add(volume.labelmap,
+          'opacity', 0, 1);
       labelmapgui.open();
       
       // 
@@ -210,35 +200,35 @@
       modelgui.open();
       
       var lhgui = modelgui.addFolder('Left Hemisphere');
-      var lhVisibleController = lhgui.add(lh, '_visible');
-      var lhOpacityController = lhgui.add(lh, '_opacity', 0, 1);
-      var lhColorController = lhgui.addColor(lh, '_color');
+      var lhVisibleController = lhgui.add(lh, 'visible');
+      var lhOpacityController = lhgui.add(lh, 'opacity', 0, 1);
+      var lhColorController = lhgui.addColor(lh, 'color');
       lhgui.open();
       
       var lhcurvgui = lhgui.addFolder('Curvature');
       var lhtypeController = lhcurvgui.add(_loader, 'LhType', curvatureTypes);
-      var lhminColorController = lhcurvgui.addColor(lh.scalars(), '_minColor');
-      var lhmaxColorController = lhcurvgui.addColor(lh.scalars(), '_maxColor');
-      var lhminThresholdController = lhcurvgui.add(lh.scalars(),
-          '_minThreshold', lh.scalars().min(), lh.scalars().max());
-      var lhmaxThresholdController = lhcurvgui.add(lh.scalars(),
-          '_maxThreshold', lh.scalars().min(), lh.scalars().max());
+      var lhminColorController = lhcurvgui.addColor(lh.scalars, 'minColor');
+      var lhmaxColorController = lhcurvgui.addColor(lh.scalars, 'maxColor');
+      var lhminThresholdController = lhcurvgui.add(lh.scalars,
+          'lowerThreshold', lh.scalars.min, lh.scalars.max);
+      var lhmaxThresholdController = lhcurvgui.add(lh.scalars,
+          'upperThreshold', lh.scalars.min, lh.scalars.max);
       lhcurvgui.open();
       
       var rhgui = modelgui.addFolder('Right Hemisphere');
-      var rhVisibleController = rhgui.add(rh, '_visible');
-      var rhOpacityController = rhgui.add(rh, '_opacity', 0, 1);
-      var rhColorController = rhgui.addColor(rh, '_color');
+      var rhVisibleController = rhgui.add(rh, 'visible');
+      var rhOpacityController = rhgui.add(rh, 'opacity', 0, 1);
+      var rhColorController = rhgui.addColor(rh, 'color');
       rhgui.open();
       
       var rhcurvgui = rhgui.addFolder('Curvature');
       var rhtypeController = rhcurvgui.add(_loader, 'RhType', curvatureTypes);
-      var rhminColorController = rhcurvgui.addColor(rh.scalars(), '_minColor');
-      var rhmaxColorController = rhcurvgui.addColor(rh.scalars(), '_maxColor');
-      var rhminThresholdController = rhcurvgui.add(rh.scalars(),
-          '_minThreshold', rh.scalars().min(), rh.scalars().max());
-      var rhmaxThresholdController = rhcurvgui.add(rh.scalars(),
-          '_maxThreshold', rh.scalars().min(), rh.scalars().max());
+      var rhminColorController = rhcurvgui.addColor(rh.scalars, 'minColor');
+      var rhmaxColorController = rhcurvgui.addColor(rh.scalars, 'maxColor');
+      var rhminThresholdController = rhcurvgui.add(rh.scalars,
+          'lowerThreshold', rh.scalars.min, rh.scalars.max);
+      var rhmaxThresholdController = rhcurvgui.add(rh.scalars,
+          'upperThreshold', rh.scalars.min, rh.scalars.max);
       rhcurvgui.open();
       
 
@@ -246,9 +236,9 @@
       // Tracks GUI
       //
        var trackgui = gui.addFolder('Fiber Tracks');
-       var trackVisibleController = trackgui.add(tracks, '_visible');
-       var trackLengthThresholdController = trackgui.add(tracks.scalars(),
-           '_minThreshold', tracks.scalars().min(), tracks.scalars().max());
+       var trackVisibleController = trackgui.add(tracks, 'visible');
+       var trackLengthThresholdController = trackgui.add(tracks.scalars,
+           'lowerThreshold', tracks.scalars.min, tracks.scalars.max);
        trackgui.open();
       
       // volumegui callbacks
@@ -258,8 +248,8 @@
             : '#ffffff';
         
         // this setting makes the volume rendering look good
-        volume.setOpacity(0.15);
-        volume['_lowerThresold'] = 26;
+        volume.opacity = 0.15;
+        volume.lowerThreshold = 26;
         
         // Iterate over the gui controllers to grab updated values
         for ( var i in volumegui.__controllers) {
@@ -303,12 +293,12 @@
       // labelmapgui callbacks
       labelMapVisibleController.onChange(function(value) {
 
-        volume.labelMap().modified();
+        volume.modified();
         ren.render();
       });
       labelMapOpacityController.onChange(function(value) {
 
-        volume.labelMap().modified();
+        volume.modified();
         ren.render();
       });
       
@@ -352,13 +342,14 @@
         
         // we need to buffer the (maybe changed) colors
         // else wise we would start with the default red<->green mapping
-        var oldMinColor = lh.scalars().colorRange()[0];
-        var oldMaxColor = lh.scalars().colorRange()[1];
+        var oldMinColor = lh.scalars.minColor;
+        var oldMaxColor = lh.scalars.maxColor;
         
-        lh.setScalars('lh.' + curvatureFiles[_index]);
+        lh.scalars.file = 'lh.' + curvatureFiles[_index];
         lh.modified();
         
-        lh.scalars().setColorRange(oldMinColor, oldMaxColor);
+        lh.scalars.minColor = oldMinColor;
+        lh.scalars.maxColor = oldMaxColor;
         
         // this render call will trigger the onShowtime function again to re-create the GUI
         ren.render();
@@ -390,13 +381,14 @@
         
         // we need to buffer the (maybe changed) colors
         // else wise we would start with the default red<->green mapping
-        var oldMinColor = rh.scalars().colorRange()[0];
-        var oldMaxColor = rh.scalars().colorRange()[1];
+        var oldMinColor = rh.scalars.minColor;
+        var oldMaxColor = rh.scalars.maxColor;
         
-        rh.setScalars('rh.' + curvatureFiles[_index]);
+        rh.scalars.file = 'rh.' + curvatureFiles[_index];
         rh.modified();
         
-        rh.scalars().setColorRange(oldMinColor, oldMaxColor);
+        rh.scalars.minColor = oldMinColor;
+        rh.scalars.maxColor = oldMaxColor;
         
         // this render call will trigger the onShowtime function again to re-create the GUI
         ren.render();
@@ -440,9 +432,5 @@
   };
 </script>
 
-<body onload="run()" style="margin:0px;">
-  
-  <!-- the container for the renderer -->
-  <div id="r" style="background-color: #ffffff; width: 100%; height: 100%;"></div>
-    
+<body onload="run()" style="margin:0px;background-color:#000;">    
 </body>
