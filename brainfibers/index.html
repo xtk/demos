@@ -35,54 +35,55 @@
 <head>
 <title>Brainfibers</title>
 
-<script type="text/javascript" src="http://get.goXTK.com/xtk.js"></script>
+<script type="text/javascript" src="http://get.goXTK.com/xtk_edge.js"></script>
 
 <script type="text/javascript">
-  var run = function() {
+  window.onload = function() {
 
-    renderer = new X.renderer('r');
+    renderer = new X.renderer3D();
+    renderer.container = 'r';
     renderer.config.PICKING_ENABLED = false;
     renderer.init();
     
-    complete = new X.object();
-    complete.load('complete.trk');
-    complete.setOpacity(1.0);
+    complete = new X.fibers();
+    complete.file = 'complete.trk';
+    complete.opacity = 1.0;
     
-    cc = new X.object();
-    cc.load('CC_track.trk');
-    cc.setCaption('Corpus callosum');
+    cc = new X.fibers();
+    cc.file = 'CC_track.trk';
+    cc.caption = 'Corpus callosum';
     
-    laf = new X.object();
-    laf.load('LAF_track.trk');
-    laf.setCaption('Left arcuate fasciculus');
+    laf = new X.fibers();
+    laf.file = 'LAF_track.trk';
+    laf.caption = 'Left arcuate fasciculus';
     
-    raf = new X.object();
-    raf.load('RAF_track.trk');
-    raf.setCaption('Right arcuate fasciculus');
+    raf = new X.fibers();
+    raf.file = 'RAF_track.trk';
+    raf.caption = 'Right arcuate fasciculus';
         
-    lcsp = new X.object();
-    lcsp.load('LCSP_track.trk');
-    lcsp.setCaption('Left cortico spiral tract');
+    lcsp = new X.fibers();
+    lcsp.file = 'LCSP_track.trk';
+    lcsp.caption = 'Left cortico spiral tract';
     
-    rcsp = new X.object();
-    rcsp.load('RCSP_track.trk');
-    rcsp.setCaption('Right cortico spiral tract');
+    rcsp = new X.fibers();
+    rcsp.file = 'RCSP_track.trk';
+    rcsp.caption = 'Right cortico spiral tract';
 
-    lifof = new X.object();
-    lifof.load('LIFOF_track.trk');
-    lifof.setCaption('Left inferior fronto-occipital fasciculus');
+    lifof = new X.fibers();
+    lifof.file = 'LIFOF_track.trk';
+    lifof.caption = 'Left inferior fronto-occipital fasciculus';
     
-    rifof = new X.object();
-    rifof.load('RIFOF_track.trk');
-    rifof.setCaption('Right inferior fronto-occipital fasciculus');
+    rifof = new X.fibers();
+    rifof.file = 'RIFOF_track.trk';
+    rifof.caption = 'Right inferior fronto-occipital fasciculus';
     
-    lilf = new X.object();
-    lilf.load('LILF_track.trk');
-    lilf.setCaption('Left inferior longitudinal fasciculus');
+    lilf = new X.fibers();
+    lilf.file = 'LILF_track.trk';
+    lilf.caption = 'Left inferior longitudinal fasciculus';
     
-    rilf = new X.object();
-    rilf.load('RILF_track.trk');
-    rilf.setCaption('Right inferior longitudinal fasciculus');
+    rilf = new X.fibers();
+    rilf.file = 'RILF_track.trk';
+    rilf.caption = 'Right inferior longitudinal fasciculus';
     
     renderer.add(complete);
     renderer.add(cc);
@@ -99,10 +100,11 @@
     renderer.add(lilf);
     renderer.add(rilf);
     
-    renderer.camera().setUp(0,0,1);
-    renderer.camera().setPosition(-150,0,0);
+    renderer.camera.up = [0,0,1];
+    renderer.camera.position = [-150,0,0];
     
     renderer.render();
+    
     
     
   };
@@ -153,19 +155,17 @@ div.anatomyBox span {
   function restore() {
     
 
-    cc.setVisible(false);
-    laf.setVisible(false);
-    raf.setVisible(false);
-    lcsp.setVisible(false);
-    rcsp.setVisible(false);
-    lifof.setVisible(false);
-    rifof.setVisible(false);
-    lilf.setVisible(false);
-    rilf.setVisible(false);
+    cc.visible = false;
+    laf.visible = false;
+    raf.visible = false;
+    lcsp.visible = false;
+    rcsp.visible = false;
+    lifof.visible = false;
+    rifof.visible = false;
+    lilf.visible = false;
+    rilf.visible = false;
     
-    complete.setOpacity(1.0);
-    
-    renderer.render();
+    complete.opacity = 1.0;
     
   }
 
@@ -173,13 +173,11 @@ div.anatomyBox span {
     
     restore();
 
-    complete.setOpacity(0.1);
+    complete.opacity = 0.1;
     
     // retrieve object
     object = eval(objectname);
-    object.setVisible(true);
-    
-    renderer.render();
+    object.visible = true;
     
     // update checkbox
 //     document.getElementById(objectname + '_checkbox').checked = object
@@ -188,7 +186,7 @@ div.anatomyBox span {
   }
 </script>
 
-<body onload="run()">
+<body>
   
   <!-- the container for the renderer -->
   <div id="r" style="background-color: #000000; width: 80%; height: 100%; float: left;"></div>
