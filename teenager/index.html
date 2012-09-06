@@ -30,9 +30,17 @@
 <title>TEENAGE BRAIN</title>
 
 <script type="text/javascript" src="http://get.goxtk.com/xtk_edge.js"></script>
+<!--  <script type="text/javascript" src="../../X/lib/closure-library/closure/goog/base.js"></script> -->
+<!--   <script type="text/javascript" src="../../X/xtk-deps.js"></script> -->
+
 <script type="text/javascript" src="http://get.goXTK.com/xtk_xdat.gui.js"></script>
 
 <script type="text/javascript">
+
+// goog.require('X.renderer3D');
+// goog.require('X.volume');
+// goog.require('X.mesh');
+// goog.require('X.fibers');
 
   var run = function() {
     
@@ -49,8 +57,8 @@
     //
     volume = new X.volume();
     volume.file = 'orig.mgh';
-    //volume.labelmap.file = 'aseg.mgh';
-    //volume.labelmap.colortable.file = 'FreeSurferColorLUT.txt';
+    volume.labelmap.file = 'aseg.mgh';
+    volume.labelmap.colortable.file = 'FreeSurferColorLUT.txt';
     
     //
     // SURFACES
@@ -86,7 +94,7 @@
     
     ren.add(volume);
     ren.add(lh);
-    ren.add(rh);
+    //ren.add(rh);
     ren.add(tracks);
     
     ren.camera.position = [120,80,160];
