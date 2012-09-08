@@ -1,0 +1,24 @@
+html,body {
+	background-color: #000;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow: hidden !important;
+	font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana',
+		sans-serif;
+}
+
+#lh {
+	left: 0px;
+	float:left;
+	width:50%;
+	height:100%;
+	border-right: solid thin grey;
+}
+
+#rh {
+	right: 0px;
+	float:right;
+  width:50%;
+  height:100%;	
+}
