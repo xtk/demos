@@ -1,22 +1,21 @@
 window.onload = function() {
 
+  config = {
+      
+      'rotate': true,
+      'subject': 1
+      
+  };  
 
   if (location.href.match(/(\?)(\w*,*\w*)*/)) {
     
     //
     var _values = location.href.match(/(\?)(\w*,*.*\w*)*/)[0];
     
-    subject = _values;
-    subject = subject.replace('?', '').replace('/', ''); // replace any ? or /
-    console.log(subject);
+    config.subject = _values;
+    config.subject = config.subject.replace('?', '').replace('/', ''); // replace any ? or /
 
-  } else {
-  
-    subject = 1;
-  
   }
-
-  rotate = true;
 
   left();
   right();
@@ -34,7 +33,7 @@ function left() {
   // create a new X.mesh
   left_fundi = new X.mesh();
   // .. and associate the .vtk file to it
-  left_fundi.file = 'data/_hemi_' + 'lh' + '_subject_HLN-12-' + subject
+  left_fundi.file = 'data/_hemi_' + 'lh' + '_subject_HLN-12-' + config.subject
       + '/fundi.vtk';
   left_fundi.color = [ 1, 0, 0 ];
 
@@ -45,6 +44,10 @@ function left() {
   r.onShowtime = function() {
 
     var gui = new dat.GUI();      
+    
+    var subjectController = gui.add(config, 'subject', [1,2,3,4,5,6,7,8,9,10,11,12]);
+    
+    var rotation = gui.add(config, 'rotate');
     
     // now we configure the gui for interacting with the X.mesh
     var leftgui = gui.addFolder('Left Hemisphere');
@@ -57,6 +60,14 @@ function left() {
     // .. the mesh color
     var rightColorController = rightgui.addColor(right_fundi, 'color');
     rightgui.open();
+    
+    subjectController.onChange(function() {
+      
+      var currentURL = window.location + '';
+      
+      window.location = currentURL.substring(0,currentURL.indexOf('?')) + '?' + config.subject;
+      
+    });
                 
   };
 
@@ -64,7 +75,7 @@ function left() {
   // animate..
   r.onRender = function() {
 
-    if ( rotate ) {
+    if ( config.rotate ) {
       r.camera.rotate([ 1, 0 ]);
     }
 
@@ -88,7 +99,7 @@ function right() {
   // create a new X.mesh
   right_fundi = new X.mesh();
   // .. and associate the .vtk file to it
-  right_fundi.file = 'data/_hemi_' + 'rh' + '_subject_HLN-12-' + subject
+  right_fundi.file = 'data/_hemi_' + 'rh' + '_subject_HLN-12-' + config.subject
       + '/fundi.vtk';
   right_fundi.color = [ 0, 1, 0 ];
 
@@ -98,7 +109,7 @@ function right() {
   // animate..
   r.onRender = function() {
 
-    if ( rotate ) {
+    if ( config.rotate ) {
       r.camera.rotate([ 1, 0 ]);
     }
 
